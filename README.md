@@ -15,5 +15,6 @@
 - NodeJS
 - Express
 - MongoDB
+- TypeScript
 
 ## Acknowledgements
