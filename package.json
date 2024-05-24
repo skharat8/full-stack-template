@@ -3,9 +3,11 @@
   "version": "1.0.0",
   "type": "module",
   "description": "",
-  "main": "backend/server.ts",
+  "main": "backend/src/server.ts",
   "scripts": {
-    "dev": "nodemon --exec 'tsx' backend/server.ts",
+    "build": "tsc",
+    "dev": "tsx watch backend/server.ts",
+    "prestart": "npm run build",
     "start": "tsx backend/server.ts",
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint ./backend --ext ts --report-unused-disable-directives --max-warnings 0"
@@ -20,6 +22,7 @@
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
+    "express-async-handler": "^1.2.0",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.4.0"
   },

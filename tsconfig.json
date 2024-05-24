@@ -1,13 +1,27 @@
 {
   "compilerOptions": {
-    "target": "es2020",
-    "module": "NodeNext",
-
-    "strict": true,
-    "esModuleInterop": true,
+    /* Base Options */
+    "target": "ES2022",
     "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "verbatimModuleSyntax": true,
+    "forceConsistentCasingInFileNames": true,
+    "moduleDetection": "force",
+    "lib": ["ES2022"],
+
+    /* Bundler mode */
+    "moduleResolution": "bundler",
+    "module": "ESNext",
+    "isolatedModules": true,
+    "allowImportingTsExtensions": true,
+    "noEmit": true,
+
+    /* Linting */
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true
   },
-  "include": ["backend"],
-  "exclude": ["node_modules"]
+  "include": ["backend"]
 }

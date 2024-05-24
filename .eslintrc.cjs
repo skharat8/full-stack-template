@@ -1,6 +1,6 @@
 module.exports = {
   root: true,
-  env: { browser: true, es2020: true },
+  env: { browser: true, es2022: true },
   extends: [
     "airbnb",
     "airbnb-typescript",
@@ -23,7 +23,7 @@ module.exports = {
   rules: {
     "import/no-extraneous-dependencies": ["error", { devDependencies: true }],
     "no-plusplus": ["error", { allowForLoopAfterthoughts: true }],
-    "no-console": ["error", { allow: ["warn", "error"] }],
+    "no-console": "off",
     "@typescript-eslint/consistent-type-definitions": ["error", "type"],
 
     // Disable ForOfStatement rule, since that disallows for of loops.
