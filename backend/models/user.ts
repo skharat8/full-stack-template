@@ -1,6 +1,14 @@
 import mongoose, { Schema } from "mongoose";
 
-const UserSchema = new Schema(
+interface IUser {
+  username: string;
+  password: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+}
+
+const userSchema = new Schema<IUser>(
   {
     username: { type: String, required: true, unique: true },
     password: { type: String, required: true, minLength: 6 },
@@ -12,8 +20,11 @@ const UserSchema = new Schema(
   { timestamps: true }
 );
 
-UserSchema.virtual("name").get(function getFullName() {
+userSchema.virtual("name").get(function getFullName() {
   return `${this.firstName} ${this.lastName}`;
 });
 
-export default mongoose.model("User", UserSchema);
+const User = mongoose.model<IUser>("User", userSchema);
+
+export type { IUser };
+export default User;

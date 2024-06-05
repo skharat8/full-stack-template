@@ -1,6 +1,6 @@
 module.exports = {
   root: true,
-  env: { browser: true, es2022: true },
+  env: { node: true, es2022: true },
   extends: [
     "airbnb",
     "airbnb-typescript",
@@ -11,7 +11,7 @@ module.exports = {
     "plugin:@typescript-eslint/stylistic-type-checked",
     "prettier",
   ],
-  ignorePatterns: [".eslintrc.cjs"],
+  ignorePatterns: [".eslintrc.cjs", "backend/dist"],
   parser: "@typescript-eslint/parser",
   parserOptions: {
     ecmaVersion: "latest",
@@ -24,7 +24,7 @@ module.exports = {
     "import/no-extraneous-dependencies": ["error", { devDependencies: true }],
     "no-plusplus": ["error", { allowForLoopAfterthoughts: true }],
     "no-console": "off",
-    "@typescript-eslint/consistent-type-definitions": ["error", "type"],
+    "@typescript-eslint/consistent-type-definitions": "off",
 
     // Disable ForOfStatement rule, since that disallows for of loops.
     "no-restricted-syntax": [
@@ -33,5 +33,8 @@ module.exports = {
       "LabeledStatement",
       "WithStatement",
     ],
+
+    // Allow underscore in front of variables
+    "no-underscore-dangle": "off",
   },
 };
