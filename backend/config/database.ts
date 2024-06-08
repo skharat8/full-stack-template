@@ -1,15 +1,19 @@
 import mongoose from "mongoose";
+import logger from "../utils/logger";
 
 async function connectToDatabase() {
   try {
     if (!process.env.MONGODB_URI) {
-      throw new Error("MongoDB URI not found");
+      const message = "MongoDB URI not found";
+      logger.fatal(message);
+      throw new Error(message);
     }
 
-    const connection = await mongoose.connect(process.env.MONGODB_URI);
-    console.log(`Connected to MongoDB: ${connection.connection.host}`);
+    await mongoose.connect(process.env.MONGODB_URI);
+    logger.info("Connected to MongoDB");
   } catch (err) {
-    throw new Error("MongoDB connection error", { cause: err });
+    logger.error(err, "MongoDB connection error");
+    process.exit(1);
   }
 }
 
@@ -19,15 +23,15 @@ await connectToDatabase();
 const db = mongoose.connection;
 
 db.on("error", err => {
-  console.error("MongoDB connection error: ", err);
+  logger.error(err, "MongoDB connection error");
 });
 
 db.once("open", () => {
-  console.log("Connected to MongoDB");
+  logger.info("Connected to MongoDB");
 });
 
 db.on("disconnected", () => {
-  console.log("Disconnected from MongoDB");
+  logger.info("Disconnected from MongoDB");
 });
 
 export default db;

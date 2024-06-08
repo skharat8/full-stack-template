@@ -8,9 +8,10 @@
     "build": "tsc",
     "dev": "tsx watch backend/server.ts",
     "prestart": "npm run build",
-    "start": "tsx backend/server.ts",
+    "start": "tsx backend/server.ts | pino-pretty",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "lint": "eslint ./backend --ext ts --report-unused-disable-directives --max-warnings 0"
+    "lint": "eslint ./backend --ext ts --report-unused-disable-directives --max-warnings 0",
+    "pull-frontend": "git subtree pull --prefix frontend https://github.com/skharat8/react-template.git main --squash"
   },
   "keywords": [],
   "author": "",
@@ -20,6 +21,7 @@
     "cloudinary": "^2.2.0",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
+    "date-fns": "^3.6.0",
     "debug": "^4.3.4",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
@@ -28,7 +30,11 @@
     "jsonwebtoken": "^9.0.2",
     "luxon": "^3.4.4",
     "mongoose": "^8.4.0",
-    "morgan": "^1.10.0"
+    "morgan": "^1.10.0",
+    "pino": "^9.1.0",
+    "pino-http": "^10.1.0",
+    "zod": "^3.23.8",
+    "zod-validation-error": "^3.3.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.3.0",
@@ -39,6 +45,7 @@
     "@types/jsonwebtoken": "^9.0.6",
     "@types/morgan": "^1.9.9",
     "@types/node": "^20.12.12",
+    "@types/pino": "^7.0.5",
     "@typescript-eslint/eslint-plugin": "^7.10.0",
     "@typescript-eslint/parser": "^7.10.0",
     "eslint": "^8.57.0",
@@ -46,6 +53,7 @@
     "eslint-config-airbnb-typescript": "^18.0.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-import": "^2.29.1",
+    "pino-pretty": "^11.1.0",
     "tsx": "^4.10.5",
     "typescript": "^5.4.5",
     "typescript-eslint": "^7.10.0"

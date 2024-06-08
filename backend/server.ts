@@ -1,15 +1,17 @@
 import path from "path";
 import { fileURLToPath } from "url";
-import express, { type Request, type Response } from "express";
+import express from "express";
 import cors from "cors";
-import logger from "morgan";
+import pinoHttp from "pino-http";
 import cookieParser from "cookie-parser";
-import createError, { type HttpError } from "http-errors";
+import createError from "http-errors";
 
 import "./config/env";
 import "./config/database";
+import logger from "./utils/logger";
 import StatusCode from "./data/enums";
 import authRoutes from "./routes/auth.route";
+import errorHandler from "./middleware/errorHandler";
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
@@ -21,9 +23,8 @@ const PORT = process.env.PORT ?? 3000;
 /* Third Party Middleware */
 /* ---------------------- */
 
-// HTTP request logger. Logs to console after every request in this format.
-// :method :url :status :res[content-length] - :response-time ms
-app.use(logger("dev"));
+// HTTP logger. Log to console using req.log.info()
+app.use(pinoHttp({ logger }));
 
 // Enable cross-origin requests. This is needed because client and server
 // are located on different ports. A URL's origin is defined by combination
@@ -53,21 +54,11 @@ app.use("/api/auth", authRoutes);
 /* --------------------------- */
 
 // Catch requests to unknown routes.
-app.use((_, __, next) => next(createError(404)));
+app.use((_, __, next) => next(createError(StatusCode.NOT_FOUND)));
 
-app.use((err: HttpError, _: Request, res: Response) => {
-  console.error(err.message);
-
-  if (err.name === "ValidationError") {
-    return res.status(StatusCode.BAD_REQUEST).json({ error: err.message });
-  }
-
-  // Default Error
-  return res
-    .status(err.status || StatusCode.INTERNAL_SERVER_ERROR)
-    .json({ error: err.message, stack: err.stack });
-});
+// Catch all errors.
+app.use(errorHandler);
 
 app.listen(PORT, () => {
-  console.log(`[server]: Server is running at http://localhost:${PORT}`);
+  logger.info(`[server]: Server is running at http://localhost:${PORT}`);
 });
