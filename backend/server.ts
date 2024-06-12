@@ -4,7 +4,7 @@ import express from "express";
 import cors from "cors";
 import pinoHttp from "pino-http";
 import cookieParser from "cookie-parser";
-import createError from "http-errors";
+import createHttpError from "http-errors";
 
 import "./config/env";
 import logger from "./utils/logger";
@@ -53,7 +53,7 @@ const createServer = () => {
   /* --------------------------- */
 
   // Catch requests to unknown routes.
-  app.use((_, __, next) => next(createError(StatusCode.NOT_FOUND)));
+  app.use((_, __, next) => next(createHttpError(StatusCode.NOT_FOUND)));
 
   // Catch all errors.
   app.use(errorHandler);

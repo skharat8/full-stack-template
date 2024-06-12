@@ -7,7 +7,7 @@ import { createUser } from "../services/user.service";
 import type { UserSignup } from "../schemas/user.zod";
 // import { generateToken, setCookie } from "../utils/jwt.utils";
 
-const signup = (async (
+const createUserHandler = (async (
   req: Request<object, object, UserSignup>,
   res: Response,
   next: NextFunction
@@ -25,7 +25,7 @@ const signup = (async (
   }
 }) as RequestHandler;
 
-const login = ((_, res: Response) => {
+const getUserHandler = ((_, res: Response) => {
   res.json({
     data: "You hit the login endpoint",
   });
@@ -37,4 +37,4 @@ const logout = ((_, res: Response) => {
   });
 }) as RequestHandler;
 
-export { signup, login, logout };
+export { createUserHandler, getUserHandler, logout };

@@ -1,14 +1,18 @@
 import express from "express";
 
 import validateResource from "../middleware/validateResource";
-import { signup, login, logout } from "../controllers/auth.controller";
 import { userZodSchema } from "../schemas/user.zod";
+import {
+  createUserHandler,
+  getUserHandler,
+  logout,
+} from "../controllers/user.controller";
 
 const router = express.Router();
 
-router.post("/signup", validateResource(userZodSchema), signup);
+router.post("/signup", validateResource(userZodSchema), createUserHandler);
 
-router.get("/login", login);
+router.get("/login", getUserHandler);
 
 router.post("/logout", logout);
 
