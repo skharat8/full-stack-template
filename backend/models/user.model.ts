@@ -1,38 +1,9 @@
-import { z } from "zod";
+import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
-import mongoose, { Schema, Types } from "mongoose";
 
-// Zod Validation
-const userSchema = z.object({
-  body: z
-    .object({
-      username: z.string(),
-      password: z.string().min(6),
-      passwordConfirmation: z.string().min(6),
-      firstName: z.string(),
-      lastName: z.string(),
-      email: z.string().email(),
-    })
-    .refine(data => data.password === data.passwordConfirmation, {
-      message: "Password Mismatch!",
-      path: ["passwordConfirmation"],
-    }),
-});
+import type { DbUser } from "../schemas/user.zod";
 
-type User = z.infer<typeof userSchema>;
-
-// User type stored in the database
-const userDbSchema = userSchema.shape.body
-  .innerType()
-  .omit({
-    passwordConfirmation: true,
-  })
-  .extend({ createdAt: z.date(), updatedAt: z.date() });
-
-type DbUser = z.infer<typeof userDbSchema> & { _id: Types.ObjectId };
-
-// Database model
-const userMongoSchema = new Schema(
+const userSchema = new mongoose.Schema(
   {
     username: { type: String, required: true, unique: true },
     password: { type: String, required: true, minLength: 6 },
@@ -44,11 +15,11 @@ const userMongoSchema = new Schema(
   { timestamps: true }
 );
 
-userMongoSchema.virtual("name").get(function getFullName() {
+userSchema.virtual("name").get(function getFullName() {
   return `${this.firstName} ${this.lastName}`;
 });
 
-userMongoSchema.pre("save", async function generateHashedPassword(next) {
+userSchema.pre("save", async function generateHashedPassword(next) {
   if (!this.isModified("password")) {
     return next();
   }
@@ -60,14 +31,13 @@ userMongoSchema.pre("save", async function generateHashedPassword(next) {
   return next();
 });
 
-userMongoSchema.methods.comparePasswords = async function comparePasswords(
+userSchema.methods.comparePasswords = async function comparePasswords(
   this: DbUser,
-  userPassword: string
+  inputPassword: string
 ): Promise<boolean> {
-  return bcrypt.compare(userPassword, this.password);
+  return bcrypt.compare(inputPassword, this.password);
 };
 
-const UserModel = mongoose.model("User", userMongoSchema);
+const UserModel = mongoose.model("User", userSchema);
 
-export type { User, DbUser };
-export { userSchema, UserModel };
+export default UserModel;

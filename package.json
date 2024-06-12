@@ -3,13 +3,13 @@
   "version": "1.0.0",
   "type": "module",
   "description": "",
-  "main": "backend/src/server.ts",
+  "main": "backend/src/app.ts",
   "scripts": {
     "build": "tsc",
-    "dev": "tsx watch backend/server.ts",
+    "dev": "tsx watch backend/app.ts",
     "prestart": "npm run build",
-    "start": "tsx backend/server.ts | pino-pretty",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "tsx backend/app.ts",
+    "test": "vitest backend",
     "lint": "eslint ./backend --ext ts --report-unused-disable-directives --max-warnings 0",
     "pull-frontend": "git subtree pull --prefix frontend https://github.com/skharat8/react-template.git main --squash"
   },
@@ -46,6 +46,7 @@
     "@types/morgan": "^1.9.9",
     "@types/node": "^20.12.12",
     "@types/pino": "^7.0.5",
+    "@types/supertest": "^6.0.2",
     "@typescript-eslint/eslint-plugin": "^7.10.0",
     "@typescript-eslint/parser": "^7.10.0",
     "eslint": "^8.57.0",
@@ -54,8 +55,10 @@
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-import": "^2.29.1",
     "pino-pretty": "^11.1.0",
+    "supertest": "^7.0.0",
     "tsx": "^4.10.5",
     "typescript": "^5.4.5",
-    "typescript-eslint": "^7.10.0"
+    "typescript-eslint": "^7.10.0",
+    "vitest": "^1.6.0"
   }
 }

@@ -2,13 +2,15 @@ import jwt from "jsonwebtoken";
 import { type Response } from "express";
 import { Types } from "mongoose";
 
-const generateTokenAndSetCookie = (userId: Types.ObjectId, res: Response) => {
-  // Generate JWT Token
+const generateToken = (userId: Types.ObjectId): string => {
   const token = jwt.sign({ userId }, process.env.JWT_SECRET as jwt.Secret, {
     expiresIn: "7d",
   });
 
-  // Set cookie
+  return token;
+};
+
+const setCookie = (token: string, res: Response) => {
   const ageInMs = 7 * 24 * 60 * 60 * 1000; // 7 days
 
   res.cookie("jwt", token, {
@@ -19,4 +21,4 @@ const generateTokenAndSetCookie = (userId: Types.ObjectId, res: Response) => {
   });
 };
 
-export default generateTokenAndSetCookie;
+export { generateToken, setCookie };

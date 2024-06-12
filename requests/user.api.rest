@@ -1,0 +1,12 @@
+### Create User Route
+POST http://localhost:3000/api/auth/signup
+Content-Type: application/json
+
+{
+  "username": "test_name",
+  "password": "test_password",
+  "passwordConfirmation": "test_password",
+  "firstName": "John",
+  "lastName": "Doe",
+  "email": "johndoe@gmail.com"
+}

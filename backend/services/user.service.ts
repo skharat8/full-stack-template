@@ -1,16 +1,17 @@
-import createError from "http-errors";
-
-import StatusCode from "../data/enums";
-import { UserModel, type User, type DbUser } from "../models/user.model";
+import UserModel from "../models/user.model";
 import logger from "../utils/logger";
+import type { UserSignup, DbUser } from "../schemas/user.zod";
 
-const createUser = async (user: User["body"]): Promise<DbUser> => {
-  try {
-    return await UserModel.create(user);
-  } catch (err) {
-    logger.error(err);
-    throw createError(StatusCode.CONFLICT, "Failed to create new user");
-  }
+const createUser = async (
+  userData: UserSignup
+): Promise<Omit<DbUser, "password">> => {
+  const user = await UserModel.create(userData);
+  const { password, ...rest } = user.toJSON();
+  return rest;
 };
 
-export default createUser;
+const deleteUser = () => {
+  logger.info("Unimplemented");
+};
+
+export { createUser, deleteUser };

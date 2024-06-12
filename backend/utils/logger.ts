@@ -14,6 +14,7 @@ const transport = pino.transport({
 
 const logger = pino(
   {
+    enabled: !(process.env.NODE_ENV === "test"),
     base: {
       pid: false,
     },

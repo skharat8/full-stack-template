@@ -1,21 +1,27 @@
 import type { Request, Response, RequestHandler, NextFunction } from "express";
+import createHttpError from "http-errors";
 
+import logger from "../utils/logger";
 import StatusCode from "../data/enums";
-import generateTokenAndSetCookie from "../utils/generateToken";
-import type { User } from "../models/user.model";
-import createUser from "../services/user.service";
+import { createUser } from "../services/user.service";
+import type { UserSignup } from "../schemas/user.zod";
+// import { generateToken, setCookie } from "../utils/jwt.utils";
 
 const signup = (async (
-  req: Request<object, object, User["body"]>,
+  req: Request<object, object, UserSignup>,
   res: Response,
   next: NextFunction
 ) => {
   try {
     const newUser = await createUser(req.body);
-    generateTokenAndSetCookie(newUser._id, res);
-    res.status(StatusCode.CREATED).json({ _id: newUser._id });
+
+    // const jwt = generateToken(newUser._id);
+    // setCookie(jwt, res);
+
+    res.status(StatusCode.CREATED).json(newUser);
   } catch (err) {
-    next(err);
+    logger.error(err);
+    next(createHttpError(StatusCode.CONFLICT, "Failed to create new user"));
   }
 }) as RequestHandler;
 
