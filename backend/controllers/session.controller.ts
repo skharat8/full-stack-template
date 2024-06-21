@@ -4,7 +4,6 @@ import createHttpError from "http-errors";
 
 import StatusCode from "../data/enums";
 import type { UserLogin } from "../schemas/session.zod";
-import type { UserWithSession } from "../models/session.model";
 import { validatePassword } from "../services/user.service";
 import { signJwt } from "../utils/jwt.utils";
 import {
@@ -64,14 +63,14 @@ const createSessionHandler = asyncHandler(
 );
 
 const getSessionsHandler = asyncHandler(async (_: Request, res: Response) => {
-  const user = res.locals.user as UserWithSession;
+  const { user } = res.locals;
   const sessions = await findSessions({ user: user._id, valid: true });
 
   res.json({ sessions });
 });
 
 const deleteSessionHandler = asyncHandler(async (_: Request, res: Response) => {
-  const { sessionId } = res.locals.user as UserWithSession;
+  const { sessionId } = res.locals.user;
   await updateSession({ _id: sessionId }, { valid: false });
 
   res.json({ accessToken: null, refreshToken: null });
