@@ -10,3 +10,12 @@ Content-Type: application/json
   "lastName": "Doe",
   "email": "johndoe@gmail.com"
 }
+
+### Create Session Route
+POST http://localhost:3000/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "johndoe@gmail.com",
+  "password": "test_password"
+}

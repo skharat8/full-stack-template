@@ -1,18 +1,19 @@
 import express from "express";
 
 import validateResource from "../middleware/validateResource";
-import { userZodSchema } from "../schemas/user.zod";
-import {
-  createUserHandler,
-  getUserHandler,
-  logout,
-} from "../controllers/user.controller";
+import { userLoginZodSchema, userZodSchema } from "../schemas/user.zod";
+import { createUserHandler, logout } from "../controllers/user.controller";
+import { createSessionHandler } from "../controllers/session.controller";
 
 const router = express.Router();
 
 router.post("/signup", validateResource(userZodSchema), createUserHandler);
 
-router.get("/login", getUserHandler);
+router.post(
+  "/login",
+  validateResource(userLoginZodSchema),
+  createSessionHandler
+);
 
 router.post("/logout", logout);
 

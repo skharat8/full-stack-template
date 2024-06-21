@@ -1,29 +1,16 @@
-import type { Request, Response, RequestHandler, NextFunction } from "express";
-import createHttpError from "http-errors";
+import type { Request, Response, RequestHandler } from "express";
+import asyncHandler from "express-async-handler";
 
-import logger from "../utils/logger";
 import StatusCode from "../data/enums";
 import { createUser } from "../services/user.service";
 import type { UserSignup } from "../schemas/user.zod";
-// import { generateToken, setCookie } from "../utils/jwt.utils";
 
-const createUserHandler = (async (
-  req: Request<object, object, UserSignup>,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
+const createUserHandler = asyncHandler(
+  async (req: Request<object, object, UserSignup>, res: Response) => {
     const newUser = await createUser(req.body);
-
-    // const jwt = generateToken(newUser._id);
-    // setCookie(jwt, res);
-
     res.status(StatusCode.CREATED).json(newUser);
-  } catch (err) {
-    logger.error(err);
-    next(createHttpError(StatusCode.CONFLICT, "Failed to create new user"));
   }
-}) as RequestHandler;
+);
 
 const getUserHandler = ((_, res: Response) => {
   res.json({

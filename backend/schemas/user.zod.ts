@@ -17,24 +17,29 @@ const userZodSchema = z.object({
     }),
 });
 
-const userSignupSchema = userZodSchema.shape.body
-  .innerType()
-  .omit({ passwordConfirmation: true });
+const userSignupSchema = userZodSchema.shape.body.innerType();
+const userLoginSchema = userSignupSchema.pick({ email: true, password: true });
+const userLoginZodSchema = z.object({ body: userLoginSchema });
 
-const userLoginSchema = userZodSchema.shape.body
-  .innerType()
-  .pick({ email: true, password: true });
+// Interface for document stored in the database
+const userDbSchema = userSignupSchema
+  .omit({ passwordConfirmation: true })
+  .extend({
+    _id: z.instanceof(mongoose.Types.ObjectId),
+    createdAt: z.date(),
+    updatedAt: z.date(),
+    isValidPassword: z
+      .function()
+      .args(z.string())
+      .returns(z.promise(z.boolean())),
+  });
 
-// Schema for document stored in the database
-const userDbSchema = userSignupSchema.extend({
-  _id: z.instanceof(mongoose.Types.ObjectId),
-  createdAt: z.date(),
-  updatedAt: z.date(),
-});
+const safeDbUserSchema = userDbSchema.omit({ password: true });
 
 type UserSignup = z.infer<typeof userSignupSchema>;
 type UserLogin = z.infer<typeof userLoginSchema>;
 type DbUser = z.infer<typeof userDbSchema>;
+type SafeDbUser = z.infer<typeof safeDbUserSchema>;
 
-export type { UserSignup, UserLogin, DbUser };
-export { userZodSchema };
+export type { UserSignup, UserLogin, DbUser, SafeDbUser };
+export { userZodSchema, userLoginZodSchema };

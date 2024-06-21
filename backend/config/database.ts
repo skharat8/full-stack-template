@@ -28,6 +28,8 @@ const connectToDatabase = async () => {
 
     listenForDatabaseEvents();
     await mongoose.connect(process.env.MONGODB_URI);
+
+    mongoose.set("toJSON", { getters: true, virtuals: true });
   } catch (err) {
     logger.error(err, "MongoDB connection error");
     process.exit(1);

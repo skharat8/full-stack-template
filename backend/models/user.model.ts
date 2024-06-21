@@ -24,20 +24,20 @@ userSchema.pre("save", async function generateHashedPassword(next) {
     return next();
   }
 
-  const salt = await bcrypt.genSalt(10);
-  const hashedPassword = await bcrypt.hash(this.password, salt);
+  const SALT_LENGTH = 10;
+  const hashedPassword = await bcrypt.hash(this.password, SALT_LENGTH);
 
   this.password = hashedPassword;
   return next();
 });
 
-userSchema.methods.comparePasswords = async function comparePasswords(
+userSchema.methods.isValidPassword = async function isValidPassword(
   this: DbUser,
   inputPassword: string
 ): Promise<boolean> {
   return bcrypt.compare(inputPassword, this.password);
 };
 
-const UserModel = mongoose.model("User", userSchema);
+const UserModel = mongoose.model<DbUser>("User", userSchema);
 
 export default UserModel;

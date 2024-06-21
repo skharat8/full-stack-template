@@ -81,7 +81,9 @@ describe("User", () => {
     it("If user service fails to create a new user, return 409 status", async () => {
       const createUserMock = vi
         .spyOn(UserService, "createUser")
-        .mockRejectedValue("Failed to create user!");
+        .mockRejectedValue(
+          new mongoose.mongo.MongoError("Failed to create new user!")
+        );
 
       const { statusCode } = await supertest(app)
         .post("/api/auth/signup")

@@ -11,6 +11,7 @@ import logger from "./utils/logger";
 import StatusCode from "./data/enums";
 import authRoutes from "./routes/auth.route";
 import errorHandler from "./middleware/errorHandler";
+import deserializeUser from "./middleware/deserializeUser";
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
@@ -46,6 +47,8 @@ const createServer = () => {
   /* ---------------------- */
   /*  App Level Middleware  */
   /* ---------------------- */
+  app.use(deserializeUser);
+
   app.use("/api/auth", authRoutes);
 
   /* --------------------------- */

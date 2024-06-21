@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import type { Request, Response, NextFunction } from "express";
 import { HttpError } from "http-errors";
 import { ZodError } from "zod";
@@ -13,6 +14,8 @@ const errorHandler = (
   res: Response,
   __: NextFunction
 ) => {
+  if (!(err instanceof ZodError)) logger.error(err);
+
   switch (true) {
     case err instanceof ZodError: {
       const validationError = fromZodError(err);
@@ -21,24 +24,31 @@ const errorHandler = (
       break;
     }
 
+    case err instanceof mongoose.mongo.MongoError: {
+      if (err.code === 11000) {
+        const errorMessage = "Duplicate key error. Failed to create new entry.";
+        res.status(StatusCode.CONFLICT).json({ error: errorMessage });
+      } else {
+        res.status(StatusCode.CONFLICT).json({ error: err.message });
+      }
+      break;
+    }
+
     case err instanceof HttpError: {
-      logger.error(err, err.message);
       res
         .status(err.status || StatusCode.INTERNAL_SERVER_ERROR)
-        .json({ error: err.message, stack: err.stack });
+        .json({ error: err.message });
       break;
     }
 
     case err instanceof Error: {
-      logger.error(err, err.message);
       res
         .status(StatusCode.INTERNAL_SERVER_ERROR)
-        .json({ error: err.message, cause: err.cause, stack: err.stack });
+        .json({ error: err.message, cause: err.cause });
       break;
     }
 
     default:
-      logger.error(err);
       res
         .status(StatusCode.INTERNAL_SERVER_ERROR)
         .json({ error: "Unknown Error!" });
