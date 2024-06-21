@@ -8,14 +8,17 @@ Content-Type: application/json
   "password": "test_password"
 }
 
-@accessToken = {{createSession.response.body.accessToken}}
-
 ### Get Sessions Route
+@accessToken = {{createSession.response.body.accessToken}}
+@refreshToken = {{createSession.response.body.refreshToken}}
+
 GET http://localhost:3000/api/sessions
 Content-Type: application/json
 Authorization: Bearer {{accessToken}}
+x-refresh-token: {{refreshToken}}
 
 ### Delete Session Route
 DELETE http://localhost:3000/api/sessions
 Content-Type: application/json
 Authorization: Bearer {{accessToken}}
+x-refresh-token: {{refreshToken}}

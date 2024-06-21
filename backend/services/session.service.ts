@@ -19,7 +19,7 @@ const updateSession = (
   update: UpdateQuery<Session>
 ) => SessionModel.updateOne(query, update);
 
-const generateNewAccessToken = async (
+const issueNewAccessToken = async (
   refreshToken: string
 ): Promise<string | false> => {
   const result = verifyJwt(refreshToken);
@@ -33,4 +33,4 @@ const generateNewAccessToken = async (
   return signJwt({ ...user }, { expiresIn: process.env.ACCESS_TOKEN_TTL });
 };
 
-export { createSession, findSessions, updateSession, generateNewAccessToken };
+export { createSession, findSessions, updateSession, issueNewAccessToken };
