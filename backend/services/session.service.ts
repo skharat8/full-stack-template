@@ -1,11 +1,10 @@
-import mongoose from "mongoose";
 import type { FilterQuery, UpdateQuery } from "mongoose";
 import type { Session, UserWithSession } from "../models/session.model";
 import SessionModel from "../models/session.model";
 import { signJwt, verifyJwt } from "../utils/jwt.utils";
 
 const createSession = async (
-  userId: mongoose.Types.ObjectId,
+  userId: string,
   userAgent: string
 ): Promise<Session> => {
   const session = await SessionModel.create({ user: userId, userAgent });

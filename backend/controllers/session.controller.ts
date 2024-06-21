@@ -40,7 +40,7 @@ const createSessionHandler = asyncHandler(
     if (user.valid) {
       // Create a session using user ID
       const session = await createSession(
-        user.data._id,
+        user.data._id.toString(),
         req.get("user-agent") ?? ""
       );
 
