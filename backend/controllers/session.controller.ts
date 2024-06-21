@@ -3,11 +3,15 @@ import asyncHandler from "express-async-handler";
 import createHttpError from "http-errors";
 
 import StatusCode from "../data/enums";
-import type { UserLogin } from "../schemas/user.zod";
+import type { UserLogin } from "../schemas/session.zod";
 import type { UserWithSession } from "../models/session.model";
-import { createSession, findSessions } from "../services/session.service";
 import { validatePassword } from "../services/user.service";
 import { signJwt } from "../utils/jwt.utils";
+import {
+  createSession,
+  findSessions,
+  updateSession,
+} from "../services/session.service";
 
 // const setCookie = (
 //   cookieName: string,
@@ -43,12 +47,12 @@ const createSessionHandler = asyncHandler(
 
       // Generate an access token and refresh token for this session
       const accessToken = signJwt(
-        { ...user.data, session: session._id.toString() },
+        { ...user.data, sessionId: session._id.toString() },
         { expiresIn: process.env.ACCESS_TOKEN_TTL }
       );
 
       const refreshToken = signJwt(
-        { ...user.data, session: session._id.toString() },
+        { ...user.data, sessionId: session._id.toString() },
         { expiresIn: process.env.REFRESH_TOKEN_TTL }
       );
 
@@ -66,4 +70,11 @@ const getSessionsHandler = asyncHandler(async (_: Request, res: Response) => {
   res.json({ sessions });
 });
 
-export { createSessionHandler, getSessionsHandler };
+const deleteSessionHandler = asyncHandler(async (_: Request, res: Response) => {
+  const { sessionId } = res.locals.user as UserWithSession;
+  await updateSession({ _id: sessionId }, { valid: false });
+
+  res.json({ accessToken: null, refreshToken: null });
+});
+
+export { createSessionHandler, getSessionsHandler, deleteSessionHandler };

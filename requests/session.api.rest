@@ -1,0 +1,16 @@
+### Create Session Route
+POST http://localhost:3000/api/sessions
+Content-Type: application/json
+
+{
+  "email": "johndoe@gmail.com",
+  "password": "test_password"
+}
+
+### Get Sessions Route
+GET http://localhost:3000/api/sessions
+Content-Type: application/json
+
+### Delete Sessions Route
+DELETE http://localhost:3000/api/sessions
+Content-Type: application/json

@@ -1,5 +1,5 @@
 ### Create User Route
-POST http://localhost:3000/api/auth/signup
+POST http://localhost:3000/api/users
 Content-Type: application/json
 
 {
@@ -9,13 +9,4 @@ Content-Type: application/json
   "firstName": "John",
   "lastName": "Doe",
   "email": "johndoe@gmail.com"
-}
-
-### Create Session Route
-POST http://localhost:3000/api/auth/login
-Content-Type: application/json
-
-{
-  "email": "johndoe@gmail.com",
-  "password": "test_password"
 }

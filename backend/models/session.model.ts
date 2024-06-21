@@ -10,13 +10,11 @@ type Session = {
   updatedAt: Date;
 };
 
-type UserWithSession = SafeDbUser & {
-  session: { [Property in keyof Session]: Session[Property] };
-};
+type UserWithSession = SafeDbUser & { sessionId: mongoose.Types.ObjectId };
 
 const sessionSchema = new mongoose.Schema(
   {
-    user: { type: Schema.Types.ObjectId, ref: "User", unique: true },
+    user: { type: Schema.Types.ObjectId, ref: "User" },
     valid: { type: Boolean, default: true },
     userAgent: { type: String },
   },
@@ -24,7 +22,7 @@ const sessionSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-const SessionModel = mongoose.model("Session", sessionSchema);
+const SessionModel = mongoose.model<Session>("Session", sessionSchema);
 
 export default SessionModel;
 export type { Session, UserWithSession };

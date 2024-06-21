@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import { z } from "zod";
 
-const userZodSchema = z.object({
+const createUserSchema = z.object({
   body: z
     .object({
       username: z.string(),
@@ -17,9 +17,7 @@ const userZodSchema = z.object({
     }),
 });
 
-const userSignupSchema = userZodSchema.shape.body.innerType();
-const userLoginSchema = userSignupSchema.pick({ email: true, password: true });
-const userLoginZodSchema = z.object({ body: userLoginSchema });
+const userSignupSchema = createUserSchema.shape.body.innerType();
 
 // Interface for document stored in the database
 const userDbSchema = userSignupSchema
@@ -37,9 +35,8 @@ const userDbSchema = userSignupSchema
 const safeDbUserSchema = userDbSchema.omit({ password: true });
 
 type UserSignup = z.infer<typeof userSignupSchema>;
-type UserLogin = z.infer<typeof userLoginSchema>;
 type DbUser = z.infer<typeof userDbSchema>;
 type SafeDbUser = z.infer<typeof safeDbUserSchema>;
 
-export type { UserSignup, UserLogin, DbUser, SafeDbUser };
-export { userZodSchema, userLoginZodSchema };
+export type { UserSignup, DbUser, SafeDbUser };
+export { createUserSchema };

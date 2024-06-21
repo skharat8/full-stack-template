@@ -37,7 +37,7 @@ describe("User", () => {
 
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       const { statusCode, body } = await supertest(app)
-        .post("/api/auth/signup")
+        .post("/api/users")
         .send(signupPayload);
 
       expect(statusCode).toBe(StatusCode.CREATED);
@@ -55,7 +55,7 @@ describe("User", () => {
       const badPayload = { ...signupPayload, password: "oops" };
 
       const { statusCode } = await supertest(app)
-        .post("/api/auth/signup")
+        .post("/api/users")
         .send(badPayload);
 
       expect(statusCode).toBe(StatusCode.BAD_REQUEST);
@@ -71,7 +71,7 @@ describe("User", () => {
       const { username, ...incompletePayload } = signupPayload;
 
       const { statusCode } = await supertest(app)
-        .post("/api/auth/signup")
+        .post("/api/users")
         .send(incompletePayload);
 
       expect(statusCode).toBe(StatusCode.BAD_REQUEST);
@@ -86,7 +86,7 @@ describe("User", () => {
         );
 
       const { statusCode } = await supertest(app)
-        .post("/api/auth/signup")
+        .post("/api/users")
         .send(signupPayload);
 
       expect(statusCode).toBe(StatusCode.CONFLICT);

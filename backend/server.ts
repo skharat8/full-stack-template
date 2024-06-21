@@ -9,7 +9,8 @@ import createHttpError from "http-errors";
 import "./config/env";
 import logger from "./utils/logger";
 import StatusCode from "./data/enums";
-import authRoutes from "./routes/auth.route";
+import userRoutes from "./routes/user.route";
+import sessionRoutes from "./routes/session.route";
 import errorHandler from "./middleware/errorHandler";
 import deserializeUser from "./middleware/deserializeUser";
 
@@ -49,7 +50,8 @@ const createServer = () => {
   /* ---------------------- */
   app.use(deserializeUser);
 
-  app.use("/api/auth", authRoutes);
+  app.use("/api/users", userRoutes);
+  app.use("/api/sessions", sessionRoutes);
 
   /* --------------------------- */
   /*  Error Handling Middleware  */
