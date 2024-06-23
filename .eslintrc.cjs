@@ -50,5 +50,8 @@ module.exports = {
         ignoreRestSiblings: true,
       },
     ],
+
+    // Allow modification of function parameter properties.
+    "no-param-reassign": "off",
   },
 };

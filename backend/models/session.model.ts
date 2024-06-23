@@ -2,8 +2,8 @@ import mongoose, { Schema } from "mongoose";
 import type { DbUser, SafeDbUser } from "../schemas/user.zod";
 
 type Session = {
-  _id: mongoose.Types.ObjectId;
-  user: DbUser["_id"];
+  id: string;
+  user: DbUser["id"];
   valid: boolean;
   userAgent: string;
   createdAt: Date;

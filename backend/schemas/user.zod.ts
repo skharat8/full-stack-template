@@ -1,4 +1,3 @@
-import mongoose from "mongoose";
 import { z } from "zod";
 
 const createUserSchema = z.object({
@@ -23,7 +22,7 @@ const userSignupSchema = createUserSchema.shape.body.innerType();
 const userDbSchema = userSignupSchema
   .omit({ passwordConfirmation: true })
   .extend({
-    _id: z.instanceof(mongoose.Types.ObjectId),
+    id: z.string(),
     createdAt: z.date(),
     updatedAt: z.date(),
     isValidPassword: z

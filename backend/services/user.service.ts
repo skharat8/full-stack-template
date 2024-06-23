@@ -7,22 +7,20 @@ type PasswordValidationResult =
 
 const createUser = async (userData: UserSignup): Promise<SafeDbUser> => {
   const user = await UserModel.create(userData);
-  const { password, ...rest } = user.toJSON();
-  return rest;
+  return user.toJSON();
 };
 
 const validatePassword = async (
   email: string,
-  userPassword: string
+  password: string
 ): Promise<PasswordValidationResult> => {
   const user = await UserModel.findOne({ email });
   if (!user) return { valid: false, error: "No account found" };
 
-  const isValid = await user.isValidPassword(userPassword);
+  const isValid = await user.isValidPassword(password);
   if (!isValid) return { valid: false, error: "Wrong password" };
 
-  const { password, ...rest } = user.toJSON();
-  return { valid: true, data: rest };
+  return { valid: true, data: user.toJSON() };
 };
 
 export { createUser, validatePassword };

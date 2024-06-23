@@ -40,18 +40,18 @@ const createSessionHandler = asyncHandler(
     if (user.valid) {
       // Create a session using user ID
       const session = await createSession(
-        user.data._id.toString(),
+        user.data.id,
         req.get("user-agent") ?? ""
       );
 
       // Generate an access token and refresh token for this session
       const accessToken = signJwt(
-        { ...user.data, sessionId: session._id.toString() },
+        { ...user.data, sessionId: session.id },
         { expiresIn: process.env.ACCESS_TOKEN_TTL }
       );
 
       const refreshToken = signJwt(
-        { ...user.data, sessionId: session._id.toString() },
+        { ...user.data, sessionId: session.id },
         { expiresIn: process.env.REFRESH_TOKEN_TTL }
       );
 
@@ -64,7 +64,7 @@ const createSessionHandler = asyncHandler(
 
 const getSessionsHandler = asyncHandler(async (_: Request, res: Response) => {
   const { user } = res.locals;
-  const sessions = await findSessions({ user: user._id, valid: true });
+  const sessions = await findSessions({ user: user.id, valid: true });
 
   res.json({ sessions });
 });

@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import logger from "../utils/logger";
+import UserModel from "../models/user.model";
 
 const listenForDatabaseEvents = () => {
   // Handle events after initial connection
@@ -18,6 +19,25 @@ const listenForDatabaseEvents = () => {
   });
 };
 
+const defineToJSON = () => {
+  mongoose.set("toJSON", {
+    transform: (document, returnedObject) => {
+      // Convert MongoDB ObjectId to string ID
+      returnedObject.id = (
+        returnedObject._id as mongoose.Types.ObjectId
+      ).toString();
+
+      delete returnedObject._id;
+      delete returnedObject.__v;
+
+      // Don't reveal user password
+      if (document instanceof UserModel) {
+        delete returnedObject.password;
+      }
+    },
+  });
+};
+
 const connectToDatabase = async () => {
   try {
     if (!process.env.MONGODB_URI) {
@@ -28,8 +48,7 @@ const connectToDatabase = async () => {
 
     listenForDatabaseEvents();
     await mongoose.connect(process.env.MONGODB_URI);
-
-    mongoose.set("toJSON", { getters: true, virtuals: true });
+    defineToJSON();
   } catch (err) {
     logger.error(err, "MongoDB connection error");
     process.exit(1);

@@ -20,7 +20,7 @@ const signupPayload = {
 };
 
 const responsePayload = {
-  _id: userId,
+  id: userId,
   username: "test_name",
   firstName: "John",
   lastName: "Doe",
