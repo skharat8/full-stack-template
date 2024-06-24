@@ -1,4 +1,4 @@
-### Create User Route
+### Create User
 POST http://localhost:3000/api/users
 Content-Type: application/json
 
@@ -10,3 +10,9 @@ Content-Type: application/json
   "lastName": "Doe",
   "email": "johndoe@gmail.com"
 }
+
+### Get Current User
+GET http://localhost:3000/api/users/me
+Content-Type: application/json
+Cookie: {{$global.accessToken}}
+Cookie: {{$global.refreshToken}}

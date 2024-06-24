@@ -12,4 +12,8 @@ const createUserHandler = asyncHandler(
   }
 );
 
-export default createUserHandler;
+const getUserHandler = asyncHandler((_: Request, res: Response) => {
+  res.json(res.locals.user);
+});
+
+export { createUserHandler, getUserHandler };

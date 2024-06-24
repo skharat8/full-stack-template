@@ -1,0 +1,26 @@
+### Create Session
+POST http://localhost:3000/api/sessions/login
+Content-Type: application/json
+
+{
+  "email": "johndoe@gmail.com",
+  "password": "test_password"
+}
+
+{{
+  $global.accessToken=response.headers["set-cookie"][0]
+  $global.refreshToken=response.headers["set-cookie"][1]
+}}
+
+### Get All Sessions
+GET http://localhost:3000/api/sessions
+Content-Type: application/json
+Cookie: {{$global.accessToken}}
+Cookie: {{$global.refreshToken}}
+
+### Delete Session
+DELETE http://localhost:3000/api/sessions/logout
+Content-Type: application/json
+Cookie: {{$global.accessToken}}
+Cookie: {{$global.refreshToken}}
+
