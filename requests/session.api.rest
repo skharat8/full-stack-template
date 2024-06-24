@@ -1,6 +1,6 @@
 ### Create Session Route
 # @name createSession
-POST http://localhost:3000/api/sessions
+POST http://localhost:3000/api/sessions/login
 Content-Type: application/json
 
 {
@@ -9,16 +9,14 @@ Content-Type: application/json
 }
 
 ### Get Sessions Route
-@accessToken = {{createSession.response.body.accessToken}}
-@refreshToken = {{createSession.response.body.refreshToken}}
+@cookies = {{createSession.response.headers.Set-Cookie}}
 
 GET http://localhost:3000/api/sessions
 Content-Type: application/json
-Authorization: Bearer {{accessToken}}
-x-refresh-token: {{refreshToken}}
+Cookie: {{cookies}}
 
 ### Delete Session Route
-DELETE http://localhost:3000/api/sessions
+DELETE http://localhost:3000/api/sessions/logout
 Content-Type: application/json
-Authorization: Bearer {{accessToken}}
-x-refresh-token: {{refreshToken}}
+Cookie: {{cookies}}
+

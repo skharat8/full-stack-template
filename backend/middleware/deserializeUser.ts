@@ -1,37 +1,49 @@
 import type { Request, Response, NextFunction, RequestHandler } from "express";
 
-import { verifyJwt } from "../utils/jwt.utils";
-import type { UserWithSession } from "../models/session.model";
+import { getCookieOptions, verifyJwt } from "../utils/jwt.utils";
+import type { JwtData } from "../models/session.model";
 import { issueNewAccessToken } from "../services/session.service";
+import { findUser } from "../services/user.service";
+
+const setLocals = async (res: Response, decodedToken: JwtData) => {
+  const { userId, sessionId } = decodedToken;
+  res.locals.user = await findUser({ _id: userId });
+  res.locals.sessionId = sessionId;
+};
 
 const deserializeUser = (async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
-  const bearerHeader = req.headers.authorization ?? "";
-  const refreshToken = req.headers["x-refresh-token"] ?? "";
-
-  if (!bearerHeader) {
+  if (!req.cookies.AccessToken) {
     return next();
   }
 
-  // The authorization header is formatted as "Bearer <token>"
-  const bearerToken = bearerHeader.split(" ")[1];
-  const { valid, expired, decodedToken } = verifyJwt(bearerToken);
+  const accessToken = req.cookies.AccessToken as string;
+  const refreshToken = req.cookies.RefreshToken as string;
+  const { valid, expired, decodedToken } = verifyJwt(accessToken);
 
+  // If access token is valid, deserialize the user.
   if (valid) {
-    res.locals.user = decodedToken as UserWithSession;
+    await setLocals(res, decodedToken as JwtData);
     return next();
   }
 
+  // If access token is expired while refresh token is valid,
+  // issue a new access token and send it back to client.
   if (expired && refreshToken) {
-    const newAccessToken = await issueNewAccessToken(refreshToken[0]);
+    const newAccessToken = await issueNewAccessToken(refreshToken);
 
     if (newAccessToken) {
-      res.setHeader("x-access-token", newAccessToken);
+      res.cookie(
+        "AccessToken",
+        newAccessToken,
+        getCookieOptions(process.env.ACCESS_TOKEN_TTL)
+      );
+
       const result = verifyJwt(newAccessToken);
-      res.locals.user = result.decodedToken as UserWithSession;
+      await setLocals(res, result.decodedToken as JwtData);
     }
   }
 

@@ -1,4 +1,4 @@
-import type { Request, Response, RequestHandler } from "express";
+import type { Request, Response } from "express";
 import asyncHandler from "express-async-handler";
 
 import StatusCode from "../data/enums";
@@ -12,16 +12,4 @@ const createUserHandler = asyncHandler(
   }
 );
 
-const getUserHandler = ((_, res: Response) => {
-  res.json({
-    data: "You hit the login endpoint",
-  });
-}) as RequestHandler;
-
-const logout = ((_, res: Response) => {
-  res.json({
-    data: "You hit the logout endpoint",
-  });
-}) as RequestHandler;
-
-export { createUserHandler, getUserHandler, logout };
+export default createUserHandler;

@@ -1,5 +1,5 @@
 import mongoose, { Schema } from "mongoose";
-import type { DbUser, SafeDbUser } from "../schemas/user.zod";
+import type { DbUser } from "../schemas/user.zod";
 
 type Session = {
   id: string;
@@ -10,7 +10,7 @@ type Session = {
   updatedAt: Date;
 };
 
-type UserWithSession = SafeDbUser & { sessionId: mongoose.Types.ObjectId };
+type JwtData = { userId: string; sessionId: string };
 
 const sessionSchema = new mongoose.Schema(
   {
@@ -25,4 +25,4 @@ const sessionSchema = new mongoose.Schema(
 const SessionModel = mongoose.model<Session>("Session", sessionSchema);
 
 export default SessionModel;
-export type { Session, UserWithSession };
+export type { Session, JwtData };

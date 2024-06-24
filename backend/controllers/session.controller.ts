@@ -5,28 +5,12 @@ import createHttpError from "http-errors";
 import StatusCode from "../data/enums";
 import type { UserLogin } from "../schemas/session.zod";
 import { validatePassword } from "../services/user.service";
-import { signJwt } from "../utils/jwt.utils";
+import { getCookieOptions, signJwt } from "../utils/jwt.utils";
 import {
   createSession,
   findSessions,
-  updateSession,
+  deleteSession,
 } from "../services/session.service";
-
-// const setCookie = (
-//   cookieName: string,
-//   token: string,
-//   age: string,
-//   res: Response
-// ) => {
-//   const ageInMs = convertDurationToMs(age);
-
-//   res.cookie(cookieName, token, {
-//     maxAge: ageInMs,
-//     httpOnly: true, // Prevent XSS attacks (cross-site scripting)
-//     sameSite: "strict", // Prevent CSRF attacks (cross-site request forgery)
-//     secure: process.env.NODE_ENV !== "development",
-//   });
-// };
 
 const createSessionHandler = asyncHandler(
   async (
@@ -45,17 +29,23 @@ const createSessionHandler = asyncHandler(
       );
 
       // Generate an access token and refresh token for this session
+      const { ACCESS_TOKEN_TTL, REFRESH_TOKEN_TTL } = process.env;
+
       const accessToken = signJwt(
-        { ...user.data, sessionId: session.id },
-        { expiresIn: process.env.ACCESS_TOKEN_TTL }
+        { userId: user.data.id, sessionId: session.id },
+        { expiresIn: ACCESS_TOKEN_TTL }
       );
 
       const refreshToken = signJwt(
-        { ...user.data, sessionId: session.id },
-        { expiresIn: process.env.REFRESH_TOKEN_TTL }
+        { userId: user.data.id, sessionId: session.id },
+        { expiresIn: REFRESH_TOKEN_TTL }
       );
 
-      res.json({ accessToken, refreshToken });
+      const accessCookieOptions = getCookieOptions(ACCESS_TOKEN_TTL);
+      const refreshCookieOptions = getCookieOptions(REFRESH_TOKEN_TTL);
+      res.cookie("AccessToken", accessToken, accessCookieOptions);
+      res.cookie("RefreshToken", refreshToken, refreshCookieOptions);
+      res.json({ msg: "Session created" });
     } else {
       next(createHttpError(StatusCode.UNAUTHORIZED, user.error));
     }
@@ -64,16 +54,17 @@ const createSessionHandler = asyncHandler(
 
 const getSessionsHandler = asyncHandler(async (_: Request, res: Response) => {
   const { user } = res.locals;
-  const sessions = await findSessions({ user: user.id, valid: true });
+  const sessions = await findSessions({ user: user?.id, valid: true });
 
   res.json({ sessions });
 });
 
 const deleteSessionHandler = asyncHandler(async (_: Request, res: Response) => {
-  const { sessionId } = res.locals.user;
-  await updateSession({ _id: sessionId }, { valid: false });
+  await deleteSession({ _id: res.locals.sessionId });
+  res.clearCookie("AccessToken");
+  res.clearCookie("RefreshToken");
 
-  res.json({ accessToken: null, refreshToken: null });
+  res.json({ msg: "Session deleted" });
 });
 
 export { createSessionHandler, getSessionsHandler, deleteSessionHandler };

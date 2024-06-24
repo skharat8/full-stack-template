@@ -11,8 +11,13 @@ import {
 
 const router = express.Router();
 
-router.post("/", validateResource(createSessionSchema), createSessionHandler);
+router.post(
+  "/login",
+  validateResource(createSessionSchema),
+  createSessionHandler
+);
+
 router.get("/", requireUser, getSessionsHandler);
-router.delete("/", requireUser, deleteSessionHandler);
+router.delete("/logout", requireUser, deleteSessionHandler);
 
 export default router;

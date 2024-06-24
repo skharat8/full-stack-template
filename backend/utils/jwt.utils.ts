@@ -1,5 +1,8 @@
 import jwt from "jsonwebtoken";
+import type { CookieOptions } from "express";
+
 import logger from "./logger";
+import convertDurationToMs from "./datetime.utils";
 
 type JwtVerificationResult = {
   valid: boolean;
@@ -46,4 +49,15 @@ const verifyJwt = (token: string): JwtVerificationResult => {
   }
 };
 
-export { signJwt, verifyJwt };
+const getCookieOptions = (age: string | undefined): CookieOptions => {
+  const ageInMs = convertDurationToMs(age ?? "");
+
+  return {
+    maxAge: ageInMs,
+    httpOnly: true, // Prevent XSS attacks (cross-site scripting)
+    sameSite: "strict", // Prevent CSRF attacks (cross-site request forgery)
+    secure: true,
+  };
+};
+
+export { signJwt, verifyJwt, getCookieOptions };
