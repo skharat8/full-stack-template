@@ -1,4 +1,5 @@
-import type { Request, Response, NextFunction, RequestHandler } from "express";
+import type { Request, Response, NextFunction } from "express";
+import asyncHandler from "express-async-handler";
 
 import { getCookieOptions, verifyJwt } from "../utils/jwt.utils";
 import type { JwtData } from "../models/session.model";
@@ -11,43 +12,41 @@ const setLocals = async (res: Response, decodedToken: JwtData) => {
   res.locals.sessionId = sessionId;
 };
 
-const deserializeUser = (async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  if (!req.cookies.AccessToken) {
-    return next();
-  }
-
-  const accessToken = req.cookies.AccessToken as string;
-  const refreshToken = req.cookies.RefreshToken as string;
-  const { valid, expired, decodedToken } = verifyJwt(accessToken);
-
-  // If access token is valid, deserialize the user.
-  if (valid) {
-    await setLocals(res, decodedToken as JwtData);
-    return next();
-  }
-
-  // If access token is expired while refresh token is valid,
-  // issue a new access token and send it back to client.
-  if (expired && refreshToken) {
-    const newAccessToken = await issueNewAccessToken(refreshToken);
-
-    if (newAccessToken) {
-      res.cookie(
-        "AccessToken",
-        newAccessToken,
-        getCookieOptions(process.env.ACCESS_TOKEN_TTL)
-      );
-
-      const result = verifyJwt(newAccessToken);
-      await setLocals(res, result.decodedToken as JwtData);
+const deserializeUser = asyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
+    if (!req.cookies.AccessToken) {
+      return next();
     }
-  }
 
-  return next();
-}) as RequestHandler;
+    const accessToken = req.cookies.AccessToken as string;
+    const refreshToken = req.cookies.RefreshToken as string;
+    const { valid, expired, decodedToken } = verifyJwt(accessToken);
+
+    // If access token is valid, deserialize the user.
+    if (valid) {
+      await setLocals(res, decodedToken as JwtData);
+      return next();
+    }
+
+    // If access token is expired while refresh token is valid,
+    // issue a new access token and send it back to client.
+    if (expired && refreshToken) {
+      const newAccessToken = await issueNewAccessToken(refreshToken);
+
+      if (newAccessToken) {
+        res.cookie(
+          "AccessToken",
+          newAccessToken,
+          getCookieOptions(process.env.ACCESS_TOKEN_TTL)
+        );
+
+        const result = verifyJwt(newAccessToken);
+        await setLocals(res, result.decodedToken as JwtData);
+      }
+    }
+
+    return next();
+  }
+);
 
 export default deserializeUser;
