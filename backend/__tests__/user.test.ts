@@ -5,12 +5,13 @@ import mongoose from "mongoose";
 import createServer from "../server";
 import StatusCode from "../data/enums";
 import * as UserService from "../services/user.service";
+import type { SafeDbUser, UserSignup } from "../schemas/user.zod";
 
 const app = createServer();
 
 const userId = new mongoose.Types.ObjectId().toString();
 
-const signupPayload = {
+const signupPayload: UserSignup = {
   username: "test_name",
   password: "test_password",
   passwordConfirmation: "test_password",
@@ -19,7 +20,8 @@ const signupPayload = {
   email: "johndoe@gmail.com",
 };
 
-const responsePayload = {
+// @ts-expect-error Not including common DB fields like createdAt
+const responsePayload: SafeDbUser = {
   id: userId,
   username: "test_name",
   firstName: "John",
@@ -32,10 +34,9 @@ describe("User", () => {
     it("If all fields are valid, return 201 status with payload", async () => {
       const createUserMock = vi
         .spyOn(UserService, "createUser")
-        // @ts-expect-error For test simplicity, ignore missing DB fields in response.
-        .mockReturnValue(responsePayload);
+        .mockResolvedValue(responsePayload);
 
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+      // eslint-disable-next-line
       const { statusCode, body } = await supertest(app)
         .post("/api/users")
         .send(signupPayload);
@@ -49,8 +50,7 @@ describe("User", () => {
     it("If password and password confirmation don't match, return 400 status", async () => {
       const createUserMock = vi
         .spyOn(UserService, "createUser")
-        // @ts-expect-error For test simplicity, ignore missing DB fields in response.
-        .mockReturnValue(responsePayload);
+        .mockResolvedValue(responsePayload);
 
       const badPayload = { ...signupPayload, password: "oops" };
 
@@ -65,8 +65,7 @@ describe("User", () => {
     it("If any fields are missing, return 400 status", async () => {
       const createUserMock = vi
         .spyOn(UserService, "createUser")
-        // @ts-expect-error For test simplicity, ignore missing DB fields in response.
-        .mockReturnValue(responsePayload);
+        .mockResolvedValue(responsePayload);
 
       const { username, ...incompletePayload } = signupPayload;
 
