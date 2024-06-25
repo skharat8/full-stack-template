@@ -8,12 +8,12 @@ import StatusCode from "../data/enums";
 import logger from "../utils/logger";
 
 // Catch all errors encountered in the app.
-const errorHandler = (
+function errorHandler(
   err: unknown,
   _: Request,
   res: Response,
   __: NextFunction
-) => {
+) {
   if (!(err instanceof ZodError)) logger.error(err);
 
   switch (true) {
@@ -53,6 +53,6 @@ const errorHandler = (
         .status(StatusCode.INTERNAL_SERVER_ERROR)
         .json({ error: "Unknown Error!" });
   }
-};
+}
 
 export default errorHandler;

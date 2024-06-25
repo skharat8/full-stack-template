@@ -3,23 +3,25 @@ import type { Session, JwtData } from "../models/session.model";
 import SessionModel from "../models/session.model";
 import { signJwt, verifyJwt } from "../utils/jwt.utils";
 
-const createSession = async (
+async function createSession(
   userId: string,
   userAgent: string
-): Promise<Session> => {
+): Promise<Session> {
   const session = await SessionModel.create({ user: userId, userAgent });
   return session.toJSON();
-};
+}
 
-const findSessions = (query: FilterQuery<Session>) =>
-  SessionModel.find(query).lean();
+function findSessions(query: FilterQuery<Session>) {
+  return SessionModel.find(query).lean();
+}
 
-const deleteSession = (query: FilterQuery<Session>) =>
-  SessionModel.deleteOne(query);
+function deleteSession(query: FilterQuery<Session>) {
+  return SessionModel.deleteOne(query);
+}
 
-const issueNewAccessToken = async (
+async function issueNewAccessToken(
   refreshToken: string
-): Promise<string | false> => {
+): Promise<string | false> {
   // Verify refresh token
   const result = verifyJwt(refreshToken);
   if (!result.valid) return false;
@@ -33,6 +35,6 @@ const issueNewAccessToken = async (
     { userId, sessionId },
     { expiresIn: process.env.ACCESS_TOKEN_TTL }
   );
-};
+}
 
 export { createSession, findSessions, deleteSession, issueNewAccessToken };

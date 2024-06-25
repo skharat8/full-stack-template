@@ -6,11 +6,11 @@ import type { JwtData } from "../models/session.model";
 import { issueNewAccessToken } from "../services/session.service";
 import { findUser } from "../services/user.service";
 
-const setLocals = async (res: Response, decodedToken: JwtData) => {
+async function setLocals(res: Response, decodedToken: JwtData) {
   const { userId, sessionId } = decodedToken;
   res.locals.user = await findUser({ _id: userId });
   res.locals.sessionId = sessionId;
-};
+}
 
 const deserializeUser = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {

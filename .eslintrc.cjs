@@ -25,6 +25,7 @@ module.exports = {
     "no-plusplus": ["error", { allowForLoopAfterthoughts: true }],
     "no-console": "off",
     "@typescript-eslint/consistent-type-definitions": "off",
+    "@typescript-eslint/no-use-before-define": ["error", { functions: false }],
 
     // Disable ForOfStatement rule, since that disallows for of loops.
     "no-restricted-syntax": [

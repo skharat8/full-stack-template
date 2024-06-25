@@ -11,20 +11,20 @@ type JwtVerificationResult = {
 };
 
 // Sign the JWT with a private key
-const signJwt = (
+function signJwt(
   object: Record<string, unknown>,
   options?: jwt.SignOptions
-): string => {
+): string {
   if (!process.env.PRIVATE_KEY) throw Error("Missing private key");
 
   return jwt.sign(object, process.env.PRIVATE_KEY as jwt.Secret, {
     ...(options && options),
     algorithm: "RS256",
   });
-};
+}
 
 // Verify the JWT with a public key
-const verifyJwt = (token: string): JwtVerificationResult => {
+function verifyJwt(token: string): JwtVerificationResult {
   try {
     const decodedToken = jwt.verify(
       token,
@@ -47,9 +47,9 @@ const verifyJwt = (token: string): JwtVerificationResult => {
       expired: false,
     };
   }
-};
+}
 
-const getCookieOptions = (age: string | undefined): CookieOptions => {
+function getCookieOptions(age: string | undefined): CookieOptions {
   const ageInMs = convertDurationToMs(age ?? "");
 
   return {
@@ -58,6 +58,6 @@ const getCookieOptions = (age: string | undefined): CookieOptions => {
     sameSite: "strict", // Prevent CSRF attacks (cross-site request forgery)
     secure: true,
   };
-};
+}
 
 export { signJwt, verifyJwt, getCookieOptions };

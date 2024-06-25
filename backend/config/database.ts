@@ -2,7 +2,24 @@ import mongoose from "mongoose";
 import logger from "../utils/logger";
 import UserModel from "../models/user.model";
 
-const listenForDatabaseEvents = () => {
+async function connectToDatabase() {
+  try {
+    if (!process.env.MONGODB_URI) {
+      const message = "MongoDB URI not found";
+      logger.fatal(message);
+      throw new Error(message);
+    }
+
+    listenForDatabaseEvents();
+    await mongoose.connect(process.env.MONGODB_URI);
+    defineToJSON();
+  } catch (err) {
+    logger.error(err, "MongoDB connection error");
+    process.exit(1);
+  }
+}
+
+function listenForDatabaseEvents() {
   // Handle events after initial connection
   const db = mongoose.connection;
 
@@ -17,9 +34,9 @@ const listenForDatabaseEvents = () => {
   db.on("disconnected", () => {
     logger.info("Disconnected from MongoDB");
   });
-};
+}
 
-const defineToJSON = () => {
+function defineToJSON() {
   mongoose.set("toJSON", {
     transform: (document, returnedObject) => {
       // Convert MongoDB ObjectId to string ID
@@ -36,23 +53,6 @@ const defineToJSON = () => {
       }
     },
   });
-};
-
-const connectToDatabase = async () => {
-  try {
-    if (!process.env.MONGODB_URI) {
-      const message = "MongoDB URI not found";
-      logger.fatal(message);
-      throw new Error(message);
-    }
-
-    listenForDatabaseEvents();
-    await mongoose.connect(process.env.MONGODB_URI);
-    defineToJSON();
-  } catch (err) {
-    logger.error(err, "MongoDB connection error");
-    process.exit(1);
-  }
-};
+}
 
 export default connectToDatabase;

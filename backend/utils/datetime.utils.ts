@@ -1,6 +1,6 @@
 import { Duration } from "luxon";
 
-const convertDurationToMs = (duration: string): number => {
+function convertDurationToMs(duration: string): number {
   let durationInMs: number;
   const time = Number(duration.slice(0, -1));
 
@@ -23,6 +23,6 @@ const convertDurationToMs = (duration: string): number => {
   }
 
   return durationInMs;
-};
+}
 
 export default convertDurationToMs;

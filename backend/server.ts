@@ -17,7 +17,7 @@ import deserializeUser from "./middleware/deserializeUser";
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
 
-const createServer = () => {
+function createServer() {
   const app = express();
 
   /* ---------------------- */
@@ -64,6 +64,6 @@ const createServer = () => {
   app.use(errorHandler);
 
   return app;
-};
+}
 
 export default createServer;

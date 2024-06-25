@@ -9,15 +9,15 @@ type PasswordValidationResult =
   | { valid: true; data: SafeDbUser }
   | { valid: false; error: string };
 
-const createUser = async (userData: UserSignup): Promise<SafeDbUser> => {
+async function createUser(userData: UserSignup): Promise<SafeDbUser> {
   const user = await UserModel.create(userData);
   return user.toJSON();
-};
+}
 
-const validatePassword = async (
+async function validatePassword(
   email: string,
   password: string
-): Promise<PasswordValidationResult> => {
+): Promise<PasswordValidationResult> {
   const errorMessage = "Invalid username or password";
   const user = await UserModel.findOne({ email });
   if (!user) return { valid: false, error: errorMessage };
@@ -26,9 +26,9 @@ const validatePassword = async (
   if (!isValid) return { valid: false, error: errorMessage };
 
   return { valid: true, data: user.toJSON() };
-};
+}
 
-const findUser = async (query: FilterQuery<SafeDbUser>) => {
+async function findUser(query: FilterQuery<SafeDbUser>) {
   const user = await UserModel.findOne(query);
 
   if (!user) {
@@ -37,6 +37,6 @@ const findUser = async (query: FilterQuery<SafeDbUser>) => {
   }
 
   return user.toJSON();
-};
+}
 
 export { createUser, validatePassword, findUser };
