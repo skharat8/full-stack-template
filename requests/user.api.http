@@ -16,3 +16,21 @@ GET http://localhost:3000/api/users/me
 Content-Type: application/json
 Cookie: {{$global.accessToken}}
 Cookie: {{$global.refreshToken}}
+
+### Get User (Invalid)
+GET http://localhost:3000/api/users/dave
+Content-Type: application/json
+Cookie: {{$global.accessToken}}
+Cookie: {{$global.refreshToken}}
+
+?? status == 404
+?? body error includes not found
+
+### Get User (Valid)
+GET http://localhost:3000/api/users/test_name
+Content-Type: application/json
+Cookie: {{$global.accessToken}}
+Cookie: {{$global.refreshToken}}
+
+?? status == 200
+?? body firstName includes John
