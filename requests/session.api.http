@@ -3,8 +3,8 @@ POST http://localhost:3000/api/sessions/login
 Content-Type: application/json
 
 {
-  "email": "johndoe@gmail.com",
-  "password": "test_password"
+  "email": "guest@gmail.com",
+  "password": "guest_password"
 }
 
 {{

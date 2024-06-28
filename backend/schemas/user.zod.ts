@@ -1,35 +1,27 @@
 import { z } from "zod";
 
 const createUserSchema = z.object({
-  body: z
-    .object({
-      username: z.string(),
-      password: z.string().min(6),
-      passwordConfirmation: z.string().min(6),
-      firstName: z.string(),
-      lastName: z.string(),
-      email: z.string().email(),
-    })
-    .refine(data => data.password === data.passwordConfirmation, {
-      message: "Password Mismatch!",
-      path: ["passwordConfirmation"],
-    }),
+  body: z.object({
+    username: z.string(),
+    email: z.string().email(),
+    password: z.string().min(6),
+    firstName: z.string().optional(),
+    lastName: z.string().optional(),
+  }),
 });
 
-const userSignupSchema = createUserSchema.shape.body.innerType();
+const userSignupSchema = createUserSchema.shape.body;
 
 // Interface for document stored in the database
-const userDbSchema = userSignupSchema
-  .omit({ passwordConfirmation: true })
-  .extend({
-    id: z.string(),
-    createdAt: z.date(),
-    updatedAt: z.date(),
-    isValidPassword: z
-      .function()
-      .args(z.string())
-      .returns(z.promise(z.boolean())),
-  });
+const userDbSchema = userSignupSchema.extend({
+  id: z.string(),
+  createdAt: z.date(),
+  updatedAt: z.date(),
+  isValidPassword: z
+    .function()
+    .args(z.string())
+    .returns(z.promise(z.boolean())),
+});
 
 const safeDbUserSchema = userDbSchema.omit({ password: true });
 

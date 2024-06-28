@@ -13,20 +13,19 @@ const userId = new mongoose.Types.ObjectId().toString();
 
 const signupPayload: UserSignup = {
   username: "test_name",
+  email: "johndoe@gmail.com",
   password: "test_password",
-  passwordConfirmation: "test_password",
   firstName: "John",
   lastName: "Doe",
-  email: "johndoe@gmail.com",
 };
 
 // @ts-expect-error Not including common DB fields like createdAt
 const responsePayload: SafeDbUser = {
   id: userId,
   username: "test_name",
+  email: "johndoe@gmail.com",
   firstName: "John",
   lastName: "Doe",
-  email: "johndoe@gmail.com",
 };
 
 describe("User", () => {

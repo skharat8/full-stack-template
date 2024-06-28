@@ -3,12 +3,11 @@ POST http://localhost:3000/api/users
 Content-Type: application/json
 
 {
-  "username": "test_name",
-  "password": "test_password",
-  "passwordConfirmation": "test_password",
-  "firstName": "John",
-  "lastName": "Doe",
-  "email": "johndoe@gmail.com"
+  "username": "guest",
+  "email": "guest@gmail.com",
+  "password": "guest_password",
+  "firstName": "Mark",
+  "lastName": "Grayson"
 }
 
 ### Get Current User
@@ -27,7 +26,7 @@ Cookie: {{$global.refreshToken}}
 ?? body error includes not found
 
 ### Get User (Valid)
-GET http://localhost:3000/api/users/test_name
+GET http://localhost:3000/api/users/guest
 Content-Type: application/json
 Cookie: {{$global.accessToken}}
 Cookie: {{$global.refreshToken}}
