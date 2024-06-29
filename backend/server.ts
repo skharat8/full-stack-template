@@ -30,7 +30,7 @@ function createServer() {
   // Enable cross-origin requests. This is needed because client and server
   // are located on different ports. A URL's origin is defined by combination
   // of protocol (http), hostname (example.com), and port (3000).
-  app.use(cors());
+  app.use(cors({ origin: process.env.CLIENT_ORIGIN, credentials: true }));
 
   // Parse incoming JSON requests (application/json) into req.body
   app.use(express.json());
