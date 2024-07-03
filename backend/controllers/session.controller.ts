@@ -45,7 +45,7 @@ const createSessionHandler = asyncHandler(
       const refreshCookieOptions = getCookieOptions(REFRESH_TOKEN_TTL);
       res.cookie("AccessToken", accessToken, accessCookieOptions);
       res.cookie("RefreshToken", refreshToken, refreshCookieOptions);
-      res.json({ msg: "Session created" });
+      res.json(user.data);
     } else {
       next(createHttpError(StatusCode.UNAUTHORIZED, user.error));
     }
