@@ -64,7 +64,7 @@ const deleteSessionHandler = asyncHandler(async (_: Request, res: Response) => {
   res.clearCookie("AccessToken");
   res.clearCookie("RefreshToken");
 
-  res.json({ msg: "Session deleted" });
+  res.json({ message: "Session deleted" });
 });
 
 export { createSessionHandler, getSessionsHandler, deleteSessionHandler };
