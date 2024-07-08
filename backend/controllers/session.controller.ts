@@ -41,10 +41,13 @@ const createSessionHandler = asyncHandler(
         { expiresIn: REFRESH_TOKEN_TTL }
       );
 
-      const accessCookieOptions = getCookieOptions(ACCESS_TOKEN_TTL);
-      const refreshCookieOptions = getCookieOptions(REFRESH_TOKEN_TTL);
-      res.cookie("AccessToken", accessToken, accessCookieOptions);
-      res.cookie("RefreshToken", refreshToken, refreshCookieOptions);
+      // AccessToken cookie should last till refresh token expires. Otherwise,
+      // client won't have an expired token to send back to the server in case
+      // the user logs in much later.
+      const cookieOptions = getCookieOptions(REFRESH_TOKEN_TTL);
+
+      res.cookie("AccessToken", accessToken, cookieOptions);
+      res.cookie("RefreshToken", refreshToken, cookieOptions);
       res.json(user.data);
     } else {
       next(createHttpError(StatusCode.UNAUTHORIZED, user.error));
