@@ -1,87 +1,157 @@
-:root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  font-size: 62.5%;
-  line-height: 1.5;
-  color-scheme: light dark;
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+@font-face {
+  font-family: chocolateWithBrownie;
+  src: url("./fonts/chocolate-with-brownie.ttf");
+}
+
+:root {
+  /* No need to detect text color with color-contrast() because OKLCH has predictable
+  lightness. All backgrounds with L ≥ 87% have good contrast with black text. */
+
+  /* Color Palette */
+  --standard-opacity: 0.75;
+
+  /* #540d6e */
+  --purple-light: 34.13%;
+  --purple-chroma: 0.155;
+  --purple-hue: 314.22deg;
+  --purple-channel: var(--purple-light) var(--purple-chroma) var(--purple-hue);
+
+  --primary-500: oklch(var(--purple-channel));
+  --primary: var(--primary-500);
+  --primary-400: oklch(from var(--primary) calc(l + 0.126) calc(c - 0.003) h);
+  --primary-300: oklch(from var(--primary) calc(l + 0.252) calc(c - 0.004) h);
+  --primary-200: oklch(from var(--primary) calc(l + 0.377) calc(c - 0.004) h);
+  --primary-100: oklch(from var(--primary) calc(l + 0.503) calc(c - 0.043) h);
+  --primary-50: oklch(from var(--primary) calc(l + 0.628) calc(c - 0.134) h);
+  --primary-600: oklch(from var(--primary) calc(l - 0.026) calc(c + 0.001) h);
+  --primary-700: oklch(from var(--primary) calc(l - 0.062) calc(c - 0.017) h);
+  --primary-800: oklch(from var(--primary) calc(l - 0.098) calc(c - 0.035) h);
+  --primary-900: oklch(from var(--primary) calc(l - 0.131) calc(c - 0.051) h);
+
+  /* #ee4266 */
+  --pink-light: 63.93%;
+  --pink-chroma: 0.207;
+  --pink-hue: 13.47deg;
+  --pink-channel: var(--pink-light) var(--pink-chroma) var(--pink-hue);
+
+  --acc-pink-500: oklch(var(--pink-channel));
+  --second: var(--acc-pink-500);
+  --acc-pink-400: oklch(from var(--second) calc(l + 0.126) calc(c - 0.003) h);
+  --acc-pink-300: oklch(from var(--second) calc(l + 0.252) calc(c - 0.004) h);
+  --acc-pink-200: oklch(from var(--second) calc(l + 0.377) calc(c - 0.004) h);
+  --acc-pink-100: oklch(from var(--second) calc(l + 0.503) calc(c - 0.043) h);
+  --acc-pink-50: oklch(from var(--second) calc(l + 0.628) calc(c - 0.134) h);
+  --acc-pink-600: oklch(from var(--second) calc(l - 0.026) calc(c + 0.001) h);
+  --acc-pink-700: oklch(from var(--second) calc(l - 0.062) calc(c - 0.017) h);
+  --acc-pink-800: oklch(from var(--second) calc(l - 0.098) calc(c - 0.035) h);
+  --acc-pink-900: oklch(from var(--second) calc(l - 0.131) calc(c - 0.051) h);
+
+  /* #ffd23f */
+  --yellow-light: 87.89%;
+  --yellow-chroma: 0.162;
+  --yellow-hue: 90.94deg;
+  --yellow-channel: var(--yellow-light) var(--yellow-chroma) var(--yellow-hue);
+
+  --acc-yellow-500: oklch(var(--yellow-channel));
+  --third: var(--acc-yellow-500);
+  --acc-yellow-400: oklch(from var(--third) calc(l + 0.126) calc(c - 0.003) h);
+  --acc-yellow-300: oklch(from var(--third) calc(l + 0.252) calc(c - 0.004) h);
+  --acc-yellow-200: oklch(from var(--third) calc(l + 0.377) calc(c - 0.004) h);
+  --acc-yellow-100: oklch(from var(--third) calc(l + 0.503) calc(c - 0.043) h);
+  --acc-yellow-50: oklch(from var(--third) calc(l + 0.628) calc(c - 0.134) h);
+  --acc-yellow-600: oklch(from var(--third) calc(l - 0.026) calc(c + 0.001) h);
+  --acc-yellow-700: oklch(from var(--third) calc(l - 0.062) calc(c - 0.017) h);
+  --acc-yellow-800: oklch(from var(--third) calc(l - 0.098) calc(c - 0.035) h);
+  --acc-yellow-900: oklch(from var(--third) calc(l - 0.131) calc(c - 0.051) h);
+
+  /* Neutral */
+  --white: oklch(100% 0 0);
+  --black: oklch(13% 0 0);
+  --transparent-dark-gray: oklch(21.89% 0.002 17.28 / 0.6);
+  --transparent-gray: oklch(0% 0 0 / 0.5);
+  --shadow: 2px 2px 4px 2px oklch(0% 0 0 / 0.3);
+
+  /* Elements */
+  --fire-orange: oklch(70% 0.2 53);
+  --fire-red: oklch(60% 0.2 37.37);
+  --link-color: oklch(57.22% 0.212 275.14);
+  --link-color-hover: oklch(41.19% 0.262 265.74);
+
+  /* Semantic States */
+  --error: oklch(49.68% 0.18 26.81);
+
+  /* Spacing */
+  --container-top-bottom: 35px;
+  --container-left-right: 40px;
+  --card-top-bottom: 25px;
+  --card-left-right: 20px;
 }
 
 *,
 *::before,
 *::after {
+  box-sizing: inherit;
   padding: 0;
   margin: 0;
 }
 
+html {
+  box-sizing: border-box;
+  font-family: Poppins, Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  color-scheme: light dark;
+}
+
 body {
-  font-size: 1.6rem;
   display: flex;
-  place-items: center;
+  align-items: center;
+  justify-content: center;
   min-width: 320px;
-  min-height: 100vh;
+  min-height: 100dvh;
+  background-color: var(--primary-900);
 }
 
-.container {
-  width: 90%;
-  max-width: 640px;
-  margin: 0 auto;
+img {
+  max-width: 100%;
 }
 
-/* TYPOGRAPHY */
-
-h1 {
-  font-size: 3.2em;
+h1,
+h2 {
   line-height: 1.1;
 }
 
-/* LINKS */
-
 a {
   font-weight: 500;
-  color: #646cff;
+  color: theme(colors.link-color);
   text-decoration: inherit;
 }
 
 a:hover {
-  color: #535bf2;
-}
-
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-
-button:hover {
-  border-color: #646cff;
-}
-
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+  color: theme(colors.link-color-hover);
 }
 
 ul {
   list-style: none;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
+.centered-container {
+  display: flex;
+  flex-direction: column;
+  place-items: center;
+  width: 90%;
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+.main-title {
+  margin-bottom: 0.3em;
+  font-family: theme(fontFamily.chocolateWithBrownie);
+  font-size: 3rem;
+  font-weight: bold;
+  color: var(--acc-pink-800);
+  text-align: center;
 }

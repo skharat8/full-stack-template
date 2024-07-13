@@ -1,0 +1,12 @@
+@keyframes rotate {
+  to {
+    transform: rotate(1turn);
+  }
+}
+
+.spinnerMini {
+  aspect-ratio: 1;
+  margin: 0 auto;
+  font-size: 1.65rem;
+  animation: rotate 1.5s infinite linear;
+}

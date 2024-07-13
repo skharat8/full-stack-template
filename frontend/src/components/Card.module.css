@@ -1,0 +1,36 @@
+.card {
+  display: grid;
+  grid-template: auto 1fr auto / auto 1fr;
+  grid-template-areas:
+    "avatar header"
+    ". text"
+    ". buttons";
+  gap: 0.9rem;
+  align-items: center;
+  width: min(85%, 700px);
+  height: 44%;
+  padding: var(--card-top-bottom) var(--card-left-right) 0;
+  background-color: theme(colors.zinc.300);
+  border-radius: 5px;
+
+  .avatar {
+    grid-area: avatar;
+  }
+
+  .header {
+    grid-area: header;
+    font-weight: bold;
+  }
+
+  .text {
+    grid-area: text;
+    height: 7rem;
+    overflow: hidden;
+  }
+
+  .buttons {
+    display: flex;
+    grid-area: buttons;
+    gap: 1rem;
+  }
+}

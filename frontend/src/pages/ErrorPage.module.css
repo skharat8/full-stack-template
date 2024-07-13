@@ -1,0 +1,14 @@
+.errorPageContainer {
+  display: flex;
+  flex-direction: column;
+  padding: var(--container-top-bottom) var(--container-left-right);
+  background-color: theme(colors.zinc.200);
+  border-radius: 10px;
+}
+
+.errorMessage {
+  margin-bottom: 1em;
+  font-weight: 600;
+  color: var(--error);
+  text-align: center;
+}

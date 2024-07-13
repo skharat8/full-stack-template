@@ -16,12 +16,6 @@ var aliasObject = {
   "@": "/src",
   "@images": "/src/assets/images",
   "@fonts": "/src/assets/fonts",
-  "@components": "/src/components",
-  "@context": "/src/context",
-  "@data": "/src/data",
-  "@hooks": "/src/hooks",
-  "@services": "/src/services",
-  "@utils": "/src/utils",
 };
 exports.aliasObject = aliasObject;
 var aliasArray = getAliasArray(aliasObject);
