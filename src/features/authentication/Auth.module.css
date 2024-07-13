@@ -1,0 +1,71 @@
+.container {
+  width: 420px;
+  padding: var(--container-top-bottom) var(--container-left-right);
+  color: var(--black);
+  text-align: center;
+  background-color: theme(colors.zinc.200);
+  border-radius: 8px;
+}
+
+.header {
+  font-size: 2.5rem;
+  font-weight: 600;
+  color: var(--primary-700);
+}
+
+.divider {
+  width: 15%;
+  height: 3px;
+  margin: 0.4rem auto 1.7rem;
+  background-color: var(--primary-700);
+}
+
+.formContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Form */
+.formInput {
+  --form-element-height: 2.5em;
+
+  position: relative;
+  height: var(--form-element-height);
+  margin-bottom: 0.4rem;
+}
+
+.formInput input {
+  width: 100%;
+  height: 100%;
+  padding-left: 40px;
+  background: theme(colors.zinc.50);
+  border: 1px solid theme(colors.zinc.500 / 0.6);
+  border-radius: 8px;
+}
+
+.formInput input::placeholder {
+  color: var(--transparent-gray);
+}
+
+.formInput .icon {
+  position: absolute;
+  left: 15px;
+  height: inherit;
+}
+
+.formInput .icon.lock {
+  width: 1.1em;
+}
+
+.formInput input:focus {
+  outline: 1px solid var(--primary-700);
+}
+
+.errorMessage {
+  padding-left: 2.8px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--error);
+  text-align: left;
+}

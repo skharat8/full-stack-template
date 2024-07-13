@@ -15,12 +15,6 @@ const aliasObject: AliasObject = {
   "@": "/src",
   "@images": "/src/assets/images",
   "@fonts": "/src/assets/fonts",
-  "@components": "/src/components",
-  "@context": "/src/context",
-  "@data": "/src/data",
-  "@hooks": "/src/hooks",
-  "@services": "/src/services",
-  "@utils": "/src/utils",
 };
 
 const aliasArray = getAliasArray(aliasObject);

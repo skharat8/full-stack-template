@@ -1,52 +1,42 @@
-import { useState } from "react";
-import reactLogo from "@images/react.svg";
-import viteLogo from "@images/vite.svg";
-import "./App.css";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
-export default function App({ title }: AppProps) {
-  const [count, setCount] = useState(0);
-  // const [user, setUser] = useState<User | null>(null);
+import ProtectedRoute from "./components/ProtectedRoute";
+import AppLayout from "./layouts/AppLayout";
+import ErrorPage from "./pages/ErrorPage";
+import Login from "./pages/Login";
+import Home from "./pages/Home";
+import Profile from "./pages/Profile";
+import Search from "./pages/Search";
 
+const router = createBrowserRouter([
+  { path: "/login", element: <Login />, errorElement: <ErrorPage /> },
+
+  {
+    element: (
+      <ProtectedRoute>
+        <AppLayout />
+      </ProtectedRoute>
+    ),
+    errorElement: <ErrorPage />,
+    children: [
+      { path: "/", element: <Home />, errorElement: <ErrorPage /> },
+      { path: "/profile", element: <Profile />, errorElement: <ErrorPage /> },
+      { path: "/search", element: <Search />, errorElement: <ErrorPage /> },
+    ],
+  },
+]);
+
+const queryClient = new QueryClient();
+
+function App() {
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank" rel="noreferrer">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank" rel="noreferrer">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>{title}</h1>
-      <div className="card">
-        <button
-          type="button"
-          onClick={() => setCount(prevCount => prevCount + 1)}
-        >
-          count {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <QueryClientProvider client={queryClient}>
+      <RouterProvider router={router} />
+      <ReactQueryDevtools initialIsOpen={false} />
+    </QueryClientProvider>
   );
 }
 
-type AppProps = {
-  title?: string;
-};
-
-App.defaultProps = {
-  title: "React + Vite",
-};
-
-// type ContextType = { user: User | null };
-// Use with: <Outlet context={{ user } satisfies ContextType} />
-
-// export function useUser() {
-//   return useOutletContext<ContextType>();
-// }
+export default App;

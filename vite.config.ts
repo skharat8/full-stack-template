@@ -8,9 +8,6 @@ export default defineConfig({
   resolve: {
     alias: aliasObject,
   },
-  css: {
-    transformer: "lightningcss",
-  },
   build: {
     cssMinify: "lightningcss",
   },
