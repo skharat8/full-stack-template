@@ -9,8 +9,7 @@
     "test": "vitest",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "stylelint": "stylelint '**/*.css'",
-    "preview": "vite preview",
-    "prepare": "husky"
+    "preview": "vite preview"
   },
   "browserslist": [
     ">0.25%, not ie 11"
@@ -52,7 +51,6 @@
     "eslint-plugin-react": "^7.34.3",
     "eslint-plugin-react-hooks": "^4.6.2",
     "eslint-plugin-react-refresh": "^0.4.6",
-    "husky": "^9.0.11",
     "jsdom": "^24.1.0",
     "lightningcss": "^1.25.1",
     "postcss": "^8.4.39",
