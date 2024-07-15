@@ -16,7 +16,7 @@ async function createUser(userData: UserSignup): Promise<SafeDbUser> {
 
 async function validatePassword(
   email: string,
-  password: string
+  password: string,
 ): Promise<PasswordValidationResult> {
   const errorMessage = "Invalid username or password";
   const user = await UserModel.findOne({ email });

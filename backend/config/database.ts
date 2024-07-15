@@ -23,7 +23,7 @@ function listenForDatabaseEvents() {
   // Handle events after initial connection
   const db = mongoose.connection;
 
-  db.on("error", err => {
+  db.on("error", (err) => {
     logger.error(err, "MongoDB connection error");
   });
 

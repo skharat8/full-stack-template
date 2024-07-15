@@ -16,7 +16,7 @@ function Title({ children }: PropsWithChildren) {
 function Header() {
   return (
     <header
-      className={`${styles.linearGradient} flex items-center justify-between px-16px py-8px
+      className={`${styles.linearGradient} px-16px py-8px flex items-center justify-between
         shadow-md`}
     >
       <Avatar size="small" />

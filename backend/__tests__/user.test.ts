@@ -80,7 +80,7 @@ describe("User", () => {
       const createUserMock = vi
         .spyOn(UserService, "createUser")
         .mockRejectedValue(
-          new mongoose.mongo.MongoError("Failed to create new user!")
+          new mongoose.mongo.MongoError("Failed to create new user!"),
         );
 
       const { statusCode } = await supertest(app)

@@ -13,7 +13,7 @@ type JwtVerificationResult = {
 // Sign the JWT with a private key
 function signJwt(
   object: Record<string, unknown>,
-  options?: jwt.SignOptions
+  options?: jwt.SignOptions,
 ): string {
   if (!process.env.PRIVATE_KEY) throw Error("Missing private key");
 
@@ -28,7 +28,7 @@ function verifyJwt(token: string): JwtVerificationResult {
   try {
     const decodedToken = jwt.verify(
       token,
-      process.env.PUBLIC_KEY as jwt.Secret
+      process.env.PUBLIC_KEY as jwt.Secret,
     );
 
     return { valid: true, expired: false, decodedToken };

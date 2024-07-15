@@ -11,12 +11,12 @@ function useLogin() {
 
   const { mutate: login, isPending: isLoginPending } = useMutation({
     mutationFn: (loginData: UserLogin) => createUserSession(loginData),
-    onSuccess: user => {
+    onSuccess: (user) => {
       queryClient.setQueryData(["user"], user);
       queryClient.setQueryData(["user", "isAuthenticated"], true);
       navigate("/", { replace: true });
     },
-    onError: err => {
+    onError: (err) => {
       console.error(err);
       toast.error(err.message, { style: { background: "pink" } });
     },

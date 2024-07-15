@@ -9,7 +9,7 @@ const createUserHandler = asyncHandler(
   async (req: Request<object, object, UserSignup>, res: Response) => {
     const newUser = await UserService.createUser(req.body);
     res.status(StatusCode.CREATED).json(newUser);
-  }
+  },
 );
 
 const getCurrentUserHandler = asyncHandler((_: Request, res: Response) => {

@@ -8,16 +8,16 @@ function createAxiosInstance() {
   instance.defaults.withCredentials = true;
 
   instance.interceptors.response.use(
-    res => res,
-    err => {
+    (res) => res,
+    (err) => {
       if (axios.isAxiosError<ResponseError>(err)) {
         return Promise.reject(
-          new Error(err.response?.data.error ?? err.message)
+          new Error(err.response?.data.error ?? err.message),
         );
       }
 
       return Promise.reject(err);
-    }
+    },
   );
 
   return instance;

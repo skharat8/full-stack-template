@@ -12,11 +12,11 @@ function useSignup() {
         duration: 5000,
       });
     },
-    onError: err => {
+    onError: (err) => {
       console.error(err);
       toast.error(
         "Failed to create new account! Username or email already exists",
-        { style: { background: "pink" } }
+        { style: { background: "pink" } },
       );
     },
   });

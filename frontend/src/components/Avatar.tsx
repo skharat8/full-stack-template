@@ -9,7 +9,7 @@ function Avatar({ size = "medium", className }: AvatarProps) {
     large: "70rem",
   };
 
-  const baseStyles = tw`overflow-hidden rounded-full bg-accentPink-600 shadow-sm`;
+  const baseStyles = tw`bg-accentPink-600 overflow-hidden rounded-full shadow-sm`;
   const styles = clsx(baseStyles, className);
 
   return (

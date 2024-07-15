@@ -16,7 +16,7 @@ const createSessionHandler = asyncHandler(
   async (
     req: Request<object, object, UserLogin>,
     res: Response,
-    next: NextFunction
+    next: NextFunction,
   ) => {
     // Authenticate the user
     const user = await validatePassword(req.body.email, req.body.password);
@@ -25,7 +25,7 @@ const createSessionHandler = asyncHandler(
       // Create a session using user ID
       const session = await createSession(
         user.data.id,
-        req.get("user-agent") ?? ""
+        req.get("user-agent") ?? "",
       );
 
       // Generate an access token and refresh token for this session
@@ -33,12 +33,12 @@ const createSessionHandler = asyncHandler(
 
       const accessToken = signJwt(
         { userId: user.data.id, sessionId: session.id },
-        { expiresIn: ACCESS_TOKEN_TTL }
+        { expiresIn: ACCESS_TOKEN_TTL },
       );
 
       const refreshToken = signJwt(
         { userId: user.data.id, sessionId: session.id },
-        { expiresIn: REFRESH_TOKEN_TTL }
+        { expiresIn: REFRESH_TOKEN_TTL },
       );
 
       // AccessToken cookie should last till refresh token expires. Otherwise,
@@ -52,7 +52,7 @@ const createSessionHandler = asyncHandler(
     } else {
       next(createHttpError(StatusCode.UNAUTHORIZED, user.error));
     }
-  }
+  },
 );
 
 const getSessionsHandler = asyncHandler(async (_: Request, res: Response) => {

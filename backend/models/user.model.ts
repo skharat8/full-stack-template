@@ -12,7 +12,7 @@ const userSchema = new mongoose.Schema(
     lastName: { type: String },
   },
 
-  { timestamps: true }
+  { timestamps: true },
 );
 
 userSchema.virtual("name").get(function getFullName() {
@@ -33,7 +33,7 @@ userSchema.pre("save", async function generateHashedPassword(next) {
 
 userSchema.methods.isValidPassword = async function isValidPassword(
   this: DbUser,
-  inputPassword: string
+  inputPassword: string,
 ): Promise<boolean> {
   return bcrypt.compare(inputPassword, this.password);
 };

@@ -37,7 +37,7 @@ const deserializeUser = asyncHandler(
         res.cookie(
           "AccessToken",
           newAccessToken,
-          getCookieOptions(process.env.ACCESS_TOKEN_TTL)
+          getCookieOptions(process.env.ACCESS_TOKEN_TTL),
         );
 
         const result = verifyJwt(newAccessToken);
@@ -46,7 +46,7 @@ const deserializeUser = asyncHandler(
     }
 
     return next();
-  }
+  },
 );
 
 export default deserializeUser;

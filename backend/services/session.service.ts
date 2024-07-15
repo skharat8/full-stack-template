@@ -5,7 +5,7 @@ import { signJwt, verifyJwt } from "../utils/jwt.utils";
 
 async function createSession(
   userId: string,
-  userAgent: string
+  userAgent: string,
 ): Promise<Session> {
   const session = await SessionModel.create({ user: userId, userAgent });
   return session.toJSON();
@@ -20,7 +20,7 @@ function deleteSession(query: FilterQuery<Session>) {
 }
 
 async function issueNewAccessToken(
-  refreshToken: string
+  refreshToken: string,
 ): Promise<string | false> {
   // Verify refresh token
   const result = verifyJwt(refreshToken);
@@ -33,7 +33,7 @@ async function issueNewAccessToken(
 
   return signJwt(
     { userId, sessionId },
-    { expiresIn: process.env.ACCESS_TOKEN_TTL }
+    { expiresIn: process.env.ACCESS_TOKEN_TTL },
   );
 }
 

@@ -33,7 +33,6 @@ module.exports = {
     ".eslintrc.cjs",
     "alias.cjs",
     "postcss.config.js",
-    "prettier.config.js",
     "stylelint.config.js",
     "tailwind.config.js",
   ],

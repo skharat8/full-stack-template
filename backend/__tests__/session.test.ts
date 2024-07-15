@@ -60,7 +60,7 @@ describe("Session", () => {
       expect(createSessionMock).toHaveBeenCalledWith(userId, "");
       expect(validatePasswordMock).toHaveBeenCalledWith(
         loginPayload.email,
-        loginPayload.password
+        loginPayload.password,
       );
     });
 
@@ -78,7 +78,7 @@ describe("Session", () => {
       expect(createSessionMock).not.toHaveBeenCalled();
       expect(validatePasswordMock).toHaveBeenCalledWith(
         loginPayload.email,
-        loginPayload.password
+        loginPayload.password,
       );
     });
   });

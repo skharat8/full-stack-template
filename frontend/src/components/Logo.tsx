@@ -8,8 +8,8 @@ function Logo({
 }: LogoProps) {
   let hoverStyles = "";
   if (hasHoverEffect) {
-    hoverStyles = tw`transform transition duration-300 will-change-transform hover:scale-110
-    hover:transform hover:drop-shadow-logo`;
+    hoverStyles = tw`hover:drop-shadow-logo transform transition duration-300 will-change-transform
+    hover:scale-110 hover:transform`;
   }
 
   return (

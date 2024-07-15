@@ -14,7 +14,7 @@ const router = express.Router();
 router.post(
   "/login",
   validateResource(createSessionSchema),
-  createSessionHandler
+  createSessionHandler,
 );
 
 router.get("/", requireUser, getSessionsHandler);

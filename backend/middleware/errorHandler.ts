@@ -12,7 +12,7 @@ function errorHandler(
   err: unknown,
   _: Request,
   res: Response,
-  __: NextFunction
+  __: NextFunction,
 ) {
   if (!(err instanceof ZodError)) logger.error(err);
 
