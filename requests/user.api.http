@@ -26,7 +26,7 @@ Cookie: {{$global.refreshToken}}
 ?? body error includes not found
 
 ### Get User (Valid)
-GET http://localhost:3000/api/users/guest
+GET http://localhost:3000/api/users/invincible
 Content-Type: application/json
 Cookie: {{$global.accessToken}}
 Cookie: {{$global.refreshToken}}
