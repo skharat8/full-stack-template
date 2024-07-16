@@ -25,11 +25,14 @@ function errorHandler(
     }
 
     case err instanceof mongoose.mongo.MongoError: {
+      let errorMessage;
+
       if (err.code === 11000) {
-        const errorMessage = "Duplicate key error. Failed to create new entry.";
+        errorMessage = "Duplicate key error. Failed to create new entry.";
         res.status(StatusCode.CONFLICT).json({ error: errorMessage });
       } else {
-        res.status(StatusCode.CONFLICT).json({ error: err.message });
+        errorMessage = `Encountered a database error. Error code ${err.code}.`;
+        res.status(StatusCode.CONFLICT).json({ error: errorMessage });
       }
       break;
     }
