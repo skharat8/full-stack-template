@@ -2,11 +2,11 @@ import { z } from "zod";
 
 const createUserSchema = z.object({
   body: z.object({
-    username: z.string(),
-    email: z.string().email(),
+    username: z.string().trim(),
+    email: z.string().trim().email(),
     password: z.string().min(6),
-    firstName: z.string().optional(),
-    lastName: z.string().optional(),
+    firstName: z.string().trim().optional(),
+    lastName: z.string().trim().optional(),
   }),
 });
 
