@@ -1,14 +1,13 @@
 import type { Request, Response, NextFunction } from "express";
 import asyncHandler from "express-async-handler";
 
-import { getCookieOptions, verifyJwt } from "../utils/jwt.utils";
-import type { JwtData } from "../models/session.model";
+import { getCookieOptions, verifyJwt, type JwtData } from "../utils/jwt.utils";
 import { issueNewAccessToken } from "../services/session.service";
 import { findUser } from "../services/user.service";
 
 async function setLocals(res: Response, decodedToken: JwtData) {
   const { userId, sessionId } = decodedToken;
-  res.locals.user = await findUser({ _id: userId });
+  res.locals.user = await findUser({ id: userId });
   res.locals.sessionId = sessionId;
 }
 

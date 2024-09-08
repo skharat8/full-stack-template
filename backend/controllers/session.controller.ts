@@ -57,13 +57,13 @@ const createSessionHandler = asyncHandler(
 
 const getSessionsHandler = asyncHandler(async (_: Request, res: Response) => {
   const { user } = res.locals;
-  const sessions = await findSessions({ user: user?.id, valid: true });
+  const sessions = await findSessions({ userId: user?.id, valid: true });
 
   res.json({ sessions });
 });
 
 const deleteSessionHandler = asyncHandler(async (_: Request, res: Response) => {
-  await deleteSession({ _id: res.locals.sessionId });
+  await deleteSession({ id: res.locals.sessionId });
   res.clearCookie("AccessToken");
   res.clearCookie("RefreshToken");
 

@@ -4,6 +4,8 @@ import type { CookieOptions } from "express";
 import logger from "./logger";
 import convertDurationToMs from "./datetime.utils";
 
+type JwtData = { userId: string; sessionId: string };
+
 type JwtVerificationResult = {
   valid: boolean;
   expired: boolean;
@@ -61,3 +63,4 @@ function getCookieOptions(age: string | undefined): CookieOptions {
 }
 
 export { signJwt, verifyJwt, getCookieOptions };
+export type { JwtData };

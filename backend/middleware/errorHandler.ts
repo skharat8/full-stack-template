@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import { Prisma } from "@prisma/client";
 import type { Request, Response, NextFunction } from "express";
 import { HttpError } from "http-errors";
 import { ZodError } from "zod";
@@ -24,11 +24,11 @@ function errorHandler(
       break;
     }
 
-    case err instanceof mongoose.mongo.MongoError: {
+    case err instanceof Prisma.PrismaClientKnownRequestError: {
       let errorMessage;
 
-      if (err.code === 11000) {
-        errorMessage = "Duplicate key error. Failed to create new entry.";
+      if (err.code === "P2002") {
+        errorMessage = "Unique constraint violation. Failed to create new entry.";
         res.status(StatusCode.CONFLICT).json({ error: errorMessage });
       } else {
         errorMessage = `Encountered a database error. Error code ${err.code}.`;

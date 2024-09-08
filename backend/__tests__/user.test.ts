@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
 import supertest from "supertest";
-import mongoose from "mongoose";
+import { Prisma } from "@prisma/client";
 
 import createServer from "../server";
 import StatusCode from "../data/enums";
@@ -8,8 +8,6 @@ import * as UserService from "../services/user.service";
 import type { SafeDbUser, UserSignup } from "../schemas/user.zod";
 
 const app = createServer();
-
-const userId = new mongoose.Types.ObjectId().toString();
 
 const signupPayload: UserSignup = {
   username: "test_name",
@@ -21,7 +19,7 @@ const signupPayload: UserSignup = {
 
 // @ts-expect-error Not including common DB fields like createdAt
 const responsePayload: SafeDbUser = {
-  id: userId,
+  id: "1",
   username: "test_name",
   email: "johndoe@gmail.com",
   firstName: "John",
@@ -80,7 +78,10 @@ describe("User", () => {
       const createUserMock = vi
         .spyOn(UserService, "createUser")
         .mockRejectedValue(
-          new mongoose.mongo.MongoError("Failed to create new user!"),
+          new Prisma.PrismaClientKnownRequestError(
+            "Failed to create new user!",
+            { code: "P2002", clientVersion: "1" },
+          ),
         );
 
       const { statusCode } = await supertest(app)

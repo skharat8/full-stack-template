@@ -1,7 +1,7 @@
-import type { FilterQuery } from "mongoose";
 import createHttpError from "http-errors";
 import util from "node:util";
-import UserModel from "../models/user.model";
+import type { Prisma } from "@prisma/client";
+import prisma from "../prisma/customClient";
 import type { UserSignup, SafeDbUser } from "../schemas/user.zod";
 import StatusCode from "../data/enums";
 
@@ -10,8 +10,9 @@ type PasswordValidationResult =
   | { valid: false; error: string };
 
 async function createUser(userData: UserSignup): Promise<SafeDbUser> {
-  const user = await UserModel.create(userData);
-  return user.toJSON();
+  return prisma.user.create({
+    data: userData,
+  });
 }
 
 async function validatePassword(
@@ -19,24 +20,24 @@ async function validatePassword(
   password: string,
 ): Promise<PasswordValidationResult> {
   const errorMessage = "Invalid username or password";
-  const user = await UserModel.findOne({ email });
+  const user = await prisma.user.findUnique({ where: { email } });
   if (!user) return { valid: false, error: errorMessage };
 
   const isValid = await user.isValidPassword(password);
   if (!isValid) return { valid: false, error: errorMessage };
 
-  return { valid: true, data: user.toJSON() };
+  return { valid: true, data: user };
 }
 
-async function findUser(query: FilterQuery<SafeDbUser>) {
-  const user = await UserModel.findOne(query);
+async function findUser(query: Prisma.UserWhereInput): Promise<SafeDbUser> {
+  const user = await prisma.user.findFirst({ where: query });
 
   if (!user) {
     const errorMessage = `User ${util.inspect(query)} not found`;
     throw createHttpError(StatusCode.NOT_FOUND, errorMessage);
   }
 
-  return user.toJSON();
+  return user;
 }
 
 export { createUser, validatePassword, findUser };
